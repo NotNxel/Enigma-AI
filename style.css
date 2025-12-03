@@ -181,23 +181,31 @@ body {
   gap: 12px;
 }
 
-.hero-pill {
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
+/* macOS-style traffic light window buttons */
+.traffic-lights {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.8rem;
-  color: var(--fg-soft);
 }
 
-.hero-pill .dot {
-  width: 6px;
-  height: 6px;
+.traffic-dot {
+  width: 10px;
+  height: 10px;
   border-radius: 999px;
-  background: radial-gradient(circle at center, #ffb6c7, #e45c7a);
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
+.traffic-dot-red {
+  background: radial-gradient(circle at 30% 20%, #ffcccc, #ff5f57 60%, #b02117 100%);
+}
+
+.traffic-dot-amber {
+  background: radial-gradient(circle at 30% 20%, #ffe9bf, #ffbd2e 60%, #b07b12 100%);
+}
+
+.traffic-dot-green {
+  background: radial-gradient(circle at 30% 20%, #c8ffd4, #28c840 60%, #0f7c27 100%);
 }
 
 .hero-file {
@@ -206,12 +214,6 @@ body {
   font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
   opacity: 0.9;
-}
-
-.hero-main-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 }
 
 .eyebrow {
