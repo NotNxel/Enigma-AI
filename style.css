@@ -11,7 +11,7 @@
   --fg: #f7f7f7;
   --fg-soft: rgba(255, 255, 255, 0.7);
   --fg-softer: rgba(255, 255, 255, 0.5);
-  --accent: #ffffff; /* neutral accent */
+  --accent: #ffffff;
   --border-soft: rgba(255, 255, 255, 0.08);
   --radius-lg: 20px;
   --radius-full: 999px;
@@ -72,7 +72,7 @@ body {
   color: var(--fg);
 }
 
-/* 4-horsemen E logo: four white bars inside a dark square */
+/* 4-horsemen E logo: three horizontal bars + one vertical */
 .logo-mark {
   width: 28px;
   height: 28px;
@@ -88,20 +88,31 @@ body {
   position: relative;
 }
 
+/* horizontal bars */
 .e-bar {
   position: absolute;
   left: 24%;
-  right: 18%;
+  right: 34%;
   height: 2px;
   border-radius: 999px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), #ffffff);
 }
 
-/* four strokes = four horsemen */
+/* three horizontals = core of the E */
 .e-bar-1 { top: 26%; transform: skewX(-10deg); }
-.e-bar-2 { top: 42%; transform: skewX(-6deg); width: 60%; right: 25%; }
-.e-bar-3 { top: 58%; transform: skewX(-4deg); }
-.e-bar-4 { top: 74%; transform: skewX(-8deg); opacity: 0.7; }
+.e-bar-2 { top: 48%; transform: skewX(-6deg); }
+.e-bar-3 { top: 70%; transform: skewX(-4deg); }
+
+/* vertical bar = fourth horseman */
+.e-bar-4-vertical {
+  position: absolute;
+  top: 20%;
+  bottom: 20%;
+  right: 24%;
+  width: 2px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), #f0f0f0);
+}
 
 .logo-text {
   font-size: 0.95rem;
@@ -277,7 +288,7 @@ body {
   gap: 10px;
 }
 
-/* Buttons – neutral, no pink */
+/* Buttons – neutral */
 .btn {
   border-radius: var(--radius-full);
   border: 1px solid transparent;
