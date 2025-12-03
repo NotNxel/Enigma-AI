@@ -571,3 +571,119 @@ body {
     font-size: 0.75rem;
   }
 }
+
+
+/* ABOUT PAGE */
+.about-hero {
+  margin-top: 40px;
+  max-width: 640px;
+}
+
+.about-hero h1 {
+  font-size: clamp(2rem, 3vw, 2.4rem);
+  margin: 8px 0 8px;
+}
+
+.about-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.profile-card {
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: radial-gradient(circle at top left,
+              rgba(255, 255, 255, 0.06),
+              rgba(15, 15, 15, 0.96));
+  backdrop-filter: blur(18px);
+  padding: 18px 18px 16px;
+  display: flex;
+  gap: 14px;
+}
+
+.profile-photo-wrap {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: radial-gradient(circle at 0% 0%, #222, #111);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.profile-name {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.profile-role {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--fg-soft);
+}
+
+.profile-text {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: var(--fg-soft);
+}
+
+.profile-meta {
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: var(--fg-softer);
+}
+
+/* Lab section */
+.about-lab {
+  margin-top: 40px;
+}
+
+.about-lab-card {
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: radial-gradient(circle at top left,
+              rgba(255, 255, 255, 0.05),
+              rgba(10, 10, 10, 0.96));
+  backdrop-filter: blur(18px);
+  padding: 20px 18px 18px;
+  max-width: 720px;
+}
+
+.about-lab-card h2 {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+}
+
+.about-lab-card p {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: var(--fg-soft);
+}
+
+/* Responsive for about */
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-card {
+    padding: 16px 14px 14px;
+  }
+}
