@@ -72,7 +72,7 @@ body {
   color: var(--fg);
 }
 
-/* 4-horsemen E logo: three horizontal bars + one vertical */
+/* 3-horsemen E logo: three horizontal bars */
 .logo-mark {
   width: 28px;
   height: 28px;
@@ -102,17 +102,6 @@ body {
 .e-bar-1 { top: 26%; transform: skewX(-10deg); }
 .e-bar-2 { top: 48%; transform: skewX(-6deg); }
 .e-bar-3 { top: 70%; transform: skewX(-4deg); }
-
-/* vertical bar = fourth horseman */
-.e-bar-4-vertical {
-  position: absolute;
-  top: 20%;
-  bottom: 20%;
-  right: 24%;
-  width: 2px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), #f0f0f0);
-}
 
 .logo-text {
   font-size: 0.95rem;
