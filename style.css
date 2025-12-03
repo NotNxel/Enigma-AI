@@ -413,3 +413,185 @@ html, body {
 /* Katana */
 .katana {
   position: absolute;
+/* Katana section base */
+.section-katana {
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 0 7rem;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.02), transparent),
+              #050505;
+}
+
+.katana-shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  text-align: center;
+}
+
+.katana-content .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.katana-title {
+  font-size: clamp(2.2rem, 4vw, 2.8rem);
+  letter-spacing: 0.03em;
+  font-weight: 600;
+}
+
+.katana-sub {
+  max-width: 32rem;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.95rem;
+}
+
+/* Katana visual (minimal, sharp) */
+.katana-wrap {
+  position: relative;
+  width: min(420px, 90vw);
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 18px rgba(255, 132, 132, 0.35));
+}
+
+.katana-blade {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg,
+      rgba(255, 255, 255, 0.06),
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.1)
+    );
+  box-shadow:
+    0 0 18px rgba(255, 255, 255, 0.25),
+    0 0 28px rgba(255, 102, 102, 0.45);
+}
+
+.katana-guard {
+  position: absolute;
+  left: 18%;
+  width: 12px;
+  height: 26px;
+  border-radius: 12px;
+  background: radial-gradient(circle at center,
+    rgba(255, 120, 120, 0.9),
+    rgba(120, 20, 20, 0.9)
+  );
+  box-shadow: 0 0 16px rgba(255, 120, 120, 0.7);
+}
+
+.katana-hilt {
+  position: absolute;
+  left: 7%;
+  width: 70px;
+  height: 10px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg,
+      rgba(15, 15, 15, 1),
+      rgba(40, 40, 40, 1)
+    );
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
+}
+
+/* Senbon field (Bleach-style bankai) */
+.senbon-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.senbon-layer {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.75;
+}
+
+/* Each layer is a different density + speed */
+.senbon-layer-front {
+  background-image:
+    radial-gradient(1px 18px at 20% -10%, rgba(255, 160, 160, 0.9), transparent),
+    radial-gradient(1px 18px at 60% -20%, rgba(255, 220, 220, 0.9), transparent),
+    radial-gradient(1px 18px at 90% -5%, rgba(255, 150, 150, 0.9), transparent),
+    radial-gradient(1px 18px at 10% -30%, rgba(255, 180, 180, 0.85), transparent),
+    radial-gradient(1px 18px at 45% -15%, rgba(255, 200, 200, 0.95), transparent);
+  animation: senbon-front 20s linear infinite;
+}
+
+.senbon-layer-mid {
+  opacity: 0.55;
+  background-image:
+    radial-gradient(1px 18px at 30% -10%, rgba(255, 160, 160, 0.65), transparent),
+    radial-gradient(1px 18px at 70% -40%, rgba(255, 210, 210, 0.7), transparent),
+    radial-gradient(1px 18px at 5% -25%, rgba(255, 170, 170, 0.55), transparent),
+    radial-gradient(1px 18px at 85% -30%, rgba(255, 200, 200, 0.6), transparent);
+  animation: senbon-mid 32s linear infinite;
+}
+
+.senbon-layer-back {
+  opacity: 0.35;
+  background-image:
+    radial-gradient(1px 18px at 40% -15%, rgba(255, 190, 190, 0.4), transparent),
+    radial-gradient(1px 18px at 80% -35%, rgba(255, 210, 210, 0.35), transparent),
+    radial-gradient(1px 18px at 15% -45%, rgba(255, 170, 170, 0.3), transparent);
+  animation: senbon-back 48s linear infinite;
+}
+
+/* Animations: slow diagonal fall like a bankai field */
+@keyframes senbon-front {
+  0% {
+    transform: translate3d(0, -40%, 0);
+  }
+  100% {
+    transform: translate3d(-10%, 60%, 0);
+  }
+}
+
+@keyframes senbon-mid {
+  0% {
+    transform: translate3d(0, -30%, 0);
+  }
+  100% {
+    transform: translate3d(5%, 50%, 0);
+  }
+}
+
+@keyframes senbon-back {
+  0% {
+    transform: translate3d(0, -20%, 0);
+  }
+  100% {
+    transform: translate3d(-5%, 40%, 0);
+  }
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+  .section-katana {
+    padding: 4.5rem 0 5.5rem;
+  }
+
+  .katana-wrap {
+    height: 72px;
+  }
+
+  .katana-sub {
+    font-size: 0.9rem;
+  }
+}
