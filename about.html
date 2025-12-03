@@ -6,71 +6,104 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="page-dark">
-  <!-- Navbar (match your existing one) -->
+<body>
+  <!-- NAV (same as main) -->
   <header class="nav">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">
-        <!-- replace with your logo img if needed -->
-        <span class="logo-mark">E</span>
+        <span class="logo-mark logo-mark-four">
+          <span class="e-bar e-bar-1"></span>
+          <span class="e-bar e-bar-2"></span>
+          <span class="e-bar e-bar-3"></span>
+        </span>
         <span class="logo-text">Enigma</span>
       </a>
       <nav class="nav-links">
         <a href="index.html">Home</a>
         <a href="about.html" class="is-active">About</a>
-        <a href="#ai-soon" class="muted">AI (soon)</a>
+        <a href="ai.html">AI</a>
       </nav>
     </div>
   </header>
 
-  <main class="page-main">
-    <!-- Hero -->
-    <section class="section hero about-hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow">About Enigma</p>
-          <h1>The Unknown Awaits.</h1>
-          <p class="hero-sub">
-            Enigma is a tiny AI lab built by two 10th‑grade students who love
-            turning late‑night “vibe coded” ideas into real, usable tools for
-            developers and creatives.
-          </p>
-        </div>
-      </div>
+  <main class="shell">
+    <!-- Intro -->
+    <section class="about-hero">
+      <p class="eyebrow">About Enigma</p>
+      <h1>Two students, one tiny AI lab.</h1>
+      <p class="hero-sub hero-sub-large">
+        Enigma is built by two 10th‑grade students who love turning late‑night
+        vibe‑coded ideas into tools that actually ship.
+      </p>
     </section>
 
-    <!-- Who we are -->
-    <section class="section">
-      <div class="container split">
-        <div class="card glass">
-          <h2>Who we are</h2>
-          <p>
-            <strong>Neel Nikhil Pappu</strong> is the co‑founder and CEO of Enigma,
-            specializing in Artificial Intelligence, Fullstack Development and Data Science, 
-            He is  focusing on product vision, experience, and how AI can feel less like
-            a black box and more like a creative teammate.
+    <!-- Two profile cards -->
+    <section class="about-grid">
+      <!-- Neel -->
+      <article class="profile-card">
+        <div class="profile-photo-wrap">
+          <img src="neel.jpg" alt="Photo of Neel Nikhil Pappu" class="profile-photo" />
+        </div>
+        <div class="profile-body">
+          <h2 class="profile-name">Neel Nikhil Pappu</h2>
+          <p class="profile-role">Co‑founder &amp; CEO, Enigma</p>
+          <p class="profile-text">
+            Neel is the product brain behind Enigma, focused on how AI feels to use
+            – not just how it works. As a 10th‑grade student, he’s obsessed with
+            making tools that help people go from “I have a vibe” to “I shipped this”.
           </p>
-          <p>
-            <strong>Reyansh Verma</strong> is the co‑founder and core developer at Enigma,
-            specializing in JavaScript and C++, and building the systems that make
-            our ideas actually run.
+          <p class="profile-meta">
+            Roles: Full-Stack Development, UI/UX, Artificial Intelligence, Data Science.
           </p>
         </div>
+      </article>
 
-        <div class="card glass">
-          <h2>What Enigma does</h2>
-          <p>
-            Enigma AI is an experimental tool that helps people “vibecode”:
-            you describe what you want in plain language, and Enigma helps you
-            move from fuzzy idea to structured code or a working prototype faster.
+      <!-- Reyansh -->
+      <article class="profile-card">
+        <div class="profile-photo-wrap">
+          <img src="reyansh.jpg" alt="Photo of Reyansh Verma" class="profile-photo" />
+        </div>
+        <div class="profile-body">
+          <h2 class="profile-name">Reyansh Verma</h2>
+          <p class="profile-role">Co‑founder &amp; Core Developer, Enigma</p>
+          <p class="profile-text">
+            Reyansh is the one wiring everything together. Also a 10th‑grade student,
+            He works in JavaScript and C++ to turn rough ideas into working systems
+            that are fast, clean, and fun to build on.
           </p>
-          <p>
-            The goal is not to replace developers, but to give students, indie
-            hackers, and small teams a smarter way to explore concepts, test
-            flows, and ship more confidently.
+          <p class="profile-meta">
+            Roles: engineering, infrastructure, performance, experiments.
           </p>
         </div>
-      </div>
+      </article>
     </section>
 
-    <!-- Motto + visuals (can
+    <!-- What Enigma does -->
+    <section class="about-lab">
+      <div class="about-lab-card">
+        <h2>What Enigma is trying to do</h2>
+        <p>
+          Enigma AI is an experimental tool for vibecoders: you describe what you want
+          in plain language, and it helps you refactor, structure, and understand your code
+          like a calm senior dev sitting next to you.
+        </p>
+        <p>
+          The goal isn’t to replace developers. It’s to give students, indie hackers, and
+          small teams a cleaner way to explore ideas, debug faster, and ship with more confidence.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>© <span id="year"></span> Enigma. The Unknown Awaits.</span>
+    </div>
+  </footer>
+
+  <script>
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
