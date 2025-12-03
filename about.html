@@ -1,102 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>About – Enigma</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body class="page-about">
+<body class="page-dark">
+  <!-- Navbar (match your existing one) -->
   <header class="nav">
-    <div class="nav-left">
-      <div class="logo-mark">E</div>
-      <div class="logo-text">Enigma</div>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <!-- replace with your logo img if needed -->
+        <span class="logo-mark">E</span>
+        <span class="logo-text">Enigma</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html" class="is-active">About</a>
+        <a href="#ai-soon" class="muted">AI (soon)</a>
+      </nav>
     </div>
-    <nav class="nav-links">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="about.html" class="nav-link active">About</a>
-      <a href="#" class="nav-link disabled">AI (coming soon)</a>
-    </nav>
   </header>
 
-  <main class="about-main">
-    <section class="about-hero">
-      <h1>Two kids, one idea:</h1>
-      <p class="about-sub">
-        Build AI that respects the vibe, cleans up the chaos,
-        and helps coders ship without killing their flow.
-      </p>
-    </section>
-
-    <section class="about-grid">
-      <div class="about-card">
-        <h2>The project</h2>
-        <p>
-          Enigma is a tiny lab experimenting with AI tools
-          for vibe coders — people who code by feel, prototype fast,
-          and learn as they go.
-        </p>
-        <p>
-          Our first experiment is an assistant that turns rough code 
-          and napkin ideas into something structured enough to grow.
-          The motto: <strong>The Unknown Awaits</strong>.
-        </p>
-      </div>
-
-      <div class="about-card">
-        <h2>Neel Nikhil Pappu</h2>
-        <p>
-          10th grade student, full‑stack tinkerer, and the one who
-          keeps pushing for local models, self‑hosting, and weird ideas.
-        </p>
-        <p>
-          Neel focuses on the AI behavior, prompts, and backend logic
-          that power Enigma.
-        </p>
-      </div>
-
-      <div class="about-card">
-        <h2>Reyansh Verma</h2>
-        <p>
-          Co‑builder and collaborator, helping shape how the tools
-          feel to real devs — from debugging flows to UX decisions.
-        </p>
-        <p>
-          Reyansh keeps us honest about what actually helps in a
-          real coding session.
-        </p>
-      </div>
-
-      <div class="about-card">
-        <h2>What's next</h2>
-        <p>
-          A dedicated AI page, live demos, and more experiments:
-          code cleanup, project scaffolding, and vibe‑aware feedback.
-        </p>
-        <p>
-          Until then, this site is the surface of something deeper
-          we're still exploring.
-        </p>
+  <main class="page-main">
+    <!-- Hero -->
+    <section class="section hero about-hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">About Enigma</p>
+          <h1>The Unknown Awaits.</h1>
+          <p class="hero-sub">
+            Enigma is a tiny AI lab built by two 10th‑grade students who love
+            turning late‑night “vibe coded” ideas into real, usable tools for
+            developers and creatives.
+          </p>
+        </div>
       </div>
     </section>
 
-    <section class="about-backlink">
-      <a href="index.html" class="btn outline">Back to home</a>
+    <!-- Who we are -->
+    <section class="section">
+      <div class="container split">
+        <div class="card glass">
+          <h2>Who we are</h2>
+          <p>
+            <strong>Neel Nikhil Pappu</strong> is the co‑founder and CEO of Enigma,
+            specializing in Artificial Intelligence, Fullstack Development and Data Science, 
+            He is  focusing on product vision, experience, and how AI can feel less like
+            a black box and more like a creative teammate.
+          </p>
+          <p>
+            <strong>Reyansh Verma</strong> is the co‑founder and core developer at Enigma,
+            specializing in JavaScript and C++, and building the systems that make
+            our ideas actually run.
+          </p>
+        </div>
+
+        <div class="card glass">
+          <h2>What Enigma does</h2>
+          <p>
+            Enigma AI is an experimental tool that helps people “vibecode”:
+            you describe what you want in plain language, and Enigma helps you
+            move from fuzzy idea to structured code or a working prototype faster.
+          </p>
+          <p>
+            The goal is not to replace developers, but to give students, indie
+            hackers, and small teams a smarter way to explore concepts, test
+            flows, and ship more confidently.
+          </p>
+        </div>
+      </div>
     </section>
-  </main>
 
-  <footer class="footer">
-    <div class="katana-scene">
-      <div class="senbon-layer senbon-back"></div>
-      <div class="senbon-layer senbon-front"></div>
-      <div class="katana"></div>
-      <div class="unknown-text">The Unknown Awaits</div>
-    </div>
-    <div class="footer-meta">
-      <span>© <span id="year-about"></span> Enigma Lab</span>
-      <span>Built by Neel &amp; Reyansh</span>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
-</html>
+    <!-- Motto + visuals (can
