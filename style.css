@@ -11,8 +11,7 @@
   --fg: #f7f7f7;
   --fg-soft: rgba(255, 255, 255, 0.7);
   --fg-softer: rgba(255, 255, 255, 0.5);
-  --accent: #e45c7a;
-  --accent-soft: rgba(228, 92, 122, 0.5);
+  --accent: #ffffff; /* neutral accent */
   --border-soft: rgba(255, 255, 255, 0.08);
   --radius-lg: 20px;
   --radius-full: 999px;
@@ -73,19 +72,36 @@ body {
   color: var(--fg);
 }
 
+/* 4-horsemen E logo: four white bars inside a dark square */
 .logo-mark {
   width: 28px;
   height: 28px;
   border-radius: 9px;
-  background: radial-gradient(circle at 0% 0%, #ffffff, #ffb6c7 40%, #531626);
-  display: flex;
+  background: radial-gradient(circle at 0% 0%, #101010, #1a1a1a 50%, #000 100%);
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 16px;
-  color: #050505;
-  box-shadow: 0 0 22px rgba(255, 150, 180, 0.8);
+  box-shadow: 0 0 22px rgba(0, 0, 0, 0.9);
 }
+
+.logo-mark-four {
+  position: relative;
+}
+
+.e-bar {
+  position: absolute;
+  left: 24%;
+  right: 18%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), #ffffff);
+}
+
+/* four strokes = four horsemen */
+.e-bar-1 { top: 26%; transform: skewX(-10deg); }
+.e-bar-2 { top: 42%; transform: skewX(-6deg); width: 60%; right: 25%; }
+.e-bar-3 { top: 58%; transform: skewX(-4deg); }
+.e-bar-4 { top: 74%; transform: skewX(-8deg); opacity: 0.7; }
 
 .logo-text {
   font-size: 0.95rem;
@@ -158,9 +174,9 @@ body {
   border-radius: 28px;
   border: 1px solid var(--border-soft);
   background: radial-gradient(circle at top left,
-              rgba(255, 255, 255, 0.18),
-              rgba(255, 255, 255, 0.04) 40%,
-              rgba(255, 255, 255, 0.02) 70%),
+              rgba(255, 255, 255, 0.14),
+              rgba(255, 255, 255, 0.03) 40%,
+              rgba(255, 255, 255, 0.015) 70%),
             rgba(10, 10, 10, 0.85);
   backdrop-filter: blur(var(--blur-strong)) saturate(180%);
   box-shadow: var(--shadow-soft);
@@ -261,7 +277,7 @@ body {
   gap: 10px;
 }
 
-/* Buttons */
+/* Buttons – neutral, no pink */
 .btn {
   border-radius: var(--radius-full);
   border: 1px solid transparent;
@@ -276,10 +292,10 @@ body {
 }
 
 .btn.primary {
-  background: linear-gradient(135deg, #ff7296, #ffb6c7);
+  background: linear-gradient(135deg, #f4f4f4, #d6d6d6);
   color: #050505;
   border-color: rgba(0, 0, 0, 0.8);
-  box-shadow: 0 14px 40px rgba(255, 150, 180, 0.55);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
 }
 
 .btn.primary:hover {
@@ -322,7 +338,7 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: radial-gradient(circle at center, #ffb6c7, #e45c7a);
+  background: radial-gradient(circle at center, #f5f5f5, #bfbfbf);
 }
 
 /* Katana section base */
@@ -396,7 +412,7 @@ body {
       rgba(205, 205, 205, 0.7));
   box-shadow:
     0 0 18px rgba(255, 255, 255, 0.28),
-    0 0 26px rgba(255, 170, 190, 0.45);
+    0 0 26px rgba(255, 255, 255, 0.35);
   transform: translateY(-4px) rotate(-0.5deg);
 }
 
@@ -411,7 +427,7 @@ body {
   background: radial-gradient(circle at 0% 50%, #ffffff, #e3e3e3 60%, transparent 100%);
 }
 
-/* Guard (tsuba) */
+/* Guard (tsuba) – neutral metal */
 .katana-guard-real {
   position: absolute;
   left: 24%;
@@ -419,10 +435,10 @@ body {
   height: 24px;
   border-radius: 12px;
   background:
-    radial-gradient(circle at 30% 10%, #ffe3ee, #ff8cb0 45%, #5b0f28 100%);
+    radial-gradient(circle at 30% 10%, #f5f5f5, #bdbdbd 60%, #4a4a4a 100%);
   box-shadow:
-    0 0 14px rgba(255, 140, 180, 0.8),
-    0 0 20px rgba(255, 160, 200, 0.6);
+    0 0 14px rgba(255, 255, 255, 0.35),
+    0 0 20px rgba(0, 0, 0, 0.6);
 }
 
 /* Hilt core */
@@ -444,15 +460,15 @@ body {
   height: 10px;
   border-radius: 999px;
   background-image:
-    linear-gradient(135deg, rgba(255, 182, 193, 0.26) 25%, transparent 25%,
-                    transparent 50%, rgba(255, 182, 193, 0.26) 50%,
-                    rgba(255, 182, 193, 0.26) 75%, transparent 75%, transparent);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.22) 25%, transparent 25%,
+                    transparent 50%, rgba(255, 255, 255, 0.22) 50%,
+                    rgba(255, 255, 255, 0.22) 75%, transparent 75%, transparent);
   background-size: 16px 16px;
   mix-blend-mode: screen;
   opacity: 0.8;
 }
 
-/* Sakura-style petals */
+/* Sakura-style petals (ONLY pink element) */
 .petal-field {
   position: absolute;
   inset: 0;
