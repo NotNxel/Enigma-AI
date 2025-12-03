@@ -1,514 +1,102 @@
-/* Base */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About – Enigma</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-about">
+  <header class="nav">
+    <div class="nav-left">
+      <div class="logo-mark">E</div>
+      <div class="logo-text">Enigma</div>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="about.html" class="nav-link active">About</a>
+      <a href="#" class="nav-link disabled">AI (coming soon)</a>
+    </nav>
+  </header>
 
-:root {
-  --bg: #050505;
-  --bg-elevated: rgba(255, 255, 255, 0.04);
-  --fg: #f7f7f7;
-  --fg-soft: rgba(255, 255, 255, 0.7);
-  --fg-softer: rgba(255, 255, 255, 0.5);
-  --accent: #e45c7a;
-  --accent-soft: rgba(228, 92, 122, 0.5);
-  --border-soft: rgba(255, 255, 255, 0.08);
-  --radius-lg: 20px;
-  --radius-full: 999px;
-  --blur-strong: 24px;
-  --shadow-soft: 0 30px 80px rgba(0, 0, 0, 0.75);
-  --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "SF Pro Display", "Inter", sans-serif;
-}
+  <main class="about-main">
+    <section class="about-hero">
+      <h1>Two kids, one idea:</h1>
+      <p class="about-sub">
+        Build AI that respects the vibe, cleans up the chaos,
+        and helps coders ship without killing their flow.
+      </p>
+    </section>
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  background: radial-gradient(circle at top, #141414 0%, #050505 55%, #000 100%);
-  color: var(--fg);
-  font-family: var(--font-main);
-  -webkit-font-smoothing: antialiased;
-}
+    <section class="about-grid">
+      <div class="about-card">
+        <h2>The project</h2>
+        <p>
+          Enigma is a tiny lab experimenting with AI tools
+          for vibe coders — people who code by feel, prototype fast,
+          and learn as they go.
+        </p>
+        <p>
+          Our first experiment is an assistant that turns rough code 
+          and napkin ideas into something structured enough to grow.
+          The motto: <strong>The Unknown Awaits</strong>.
+        </p>
+      </div>
 
-/* Layout shells */
-body {
-  display: flex;
-  flex-direction: column;
-}
+      <div class="about-card">
+        <h2>Neel Nikhil Pappu</h2>
+        <p>
+          10th grade student, full‑stack tinkerer, and the one who
+          keeps pushing for local models, self‑hosting, and weird ideas.
+        </p>
+        <p>
+          Neel focuses on the AI behavior, prompts, and backend logic
+          that power Enigma.
+        </p>
+      </div>
 
-.shell {
-  flex: 1;
-  width: min(1120px, 100%);
-  margin: 0 auto;
-  padding: 96px 16px 64px;
-}
+      <div class="about-card">
+        <h2>Reyansh Verma</h2>
+        <p>
+          Co‑builder and collaborator, helping shape how the tools
+          feel to real devs — from debugging flows to UX decisions.
+        </p>
+        <p>
+          Reyansh keeps us honest about what actually helps in a
+          real coding session.
+        </p>
+      </div>
 
-/* NAV */
-.nav {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  backdrop-filter: blur(18px);
-  background: linear-gradient(to bottom, rgba(5, 5, 5, 0.9), transparent);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-}
+      <div class="about-card">
+        <h2>What's next</h2>
+        <p>
+          A dedicated AI page, live demos, and more experiments:
+          code cleanup, project scaffolding, and vibe‑aware feedback.
+        </p>
+        <p>
+          Until then, this site is the surface of something deeper
+          we're still exploring.
+        </p>
+      </div>
+    </section>
 
-.nav-inner {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+    <section class="about-backlink">
+      <a href="index.html" class="btn outline">Back to home</a>
+    </section>
+  </main>
 
-.nav-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  color: var(--fg);
-}
+  <footer class="footer">
+    <div class="katana-scene">
+      <div class="senbon-layer senbon-back"></div>
+      <div class="senbon-layer senbon-front"></div>
+      <div class="katana"></div>
+      <div class="unknown-text">The Unknown Awaits</div>
+    </div>
+    <div class="footer-meta">
+      <span>© <span id="year-about"></span> Enigma Lab</span>
+      <span>Built by Neel &amp; Reyansh</span>
+    </div>
+  </footer>
 
-.logo-mark {
-  width: 28px;
-  height: 28px;
-  border-radius: 9px;
-  background: radial-gradient(circle at 0% 0%, #ffffff, #ffb6c7 40%, #531626);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 16px;
-  color: #050505;
-  box-shadow: 0 0 22px rgba(255, 150, 180, 0.8);
-}
-
-.logo-text {
-  font-size: 0.95rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--fg-soft);
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  font-size: 0.88rem;
-}
-
-.nav-links a {
-  color: var(--fg-softer);
-  text-decoration: none;
-  padding: 6px 10px;
-  border-radius: 999px;
-  transition: background 0.18s ease, color 0.18s ease;
-}
-
-.nav-links a.is-active,
-.nav-links a:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--fg);
-}
-
-/* Hero */
-.hero {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 130px);
-}
-
-.hero-inner {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.hero-card {
-  position: relative;
-  width: min(640px, 100%);
-  padding: 32px 28px 28px;
-  border-radius: 32px;
-  border: 1px solid var(--border-soft);
-  background: radial-gradient(circle at top left,
-              rgba(255, 255, 255, 0.18),
-              rgba(255, 255, 255, 0.04) 40%,
-              rgba(255, 255, 255, 0.02) 70%),
-            rgba(10, 10, 10, 0.85);
-  backdrop-filter: blur(var(--blur-strong)) saturate(180%);
-  box-shadow: var(--shadow-soft);
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-/* Hero: code-style glass card */
-.hero-card-code {
-  gap: 18px;
-}
-
-.hero-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-}
-
-.hero-pill {
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.8rem;
-  color: var(--fg-soft);
-}
-
-.hero-pill .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: radial-gradient(circle at center, #ffb6c7, #e45c7a);
-}
-
-.hero-file {
-  font-size: 0.78rem;
-  color: var(--fg-softer);
-  font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-  opacity: 0.9;
-}
-
-.hero-main-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.eyebrow {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--fg-softer);
-}
-
-.hero-card h1 {
-  font-size: clamp(2.1rem, 3.4vw, 2.8rem);
-  line-height: 1.1;
-  margin: 0;
-}
-
-.hero-sub {
-  margin: 0;
-  color: var(--fg-soft);
-  font-size: 0.98rem;
-}
-
-.code-shell {
-  margin: 0;
-  padding: 14px 14px 14px 16px;
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: radial-gradient(circle at top left,
-              rgba(0, 0, 0, 0.8),
-              rgba(10, 10, 10, 0.96));
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.82);
-  overflow-x: auto;
-}
-
-.code-shell code {
-  font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-  white-space: pre;
-}
-
-.hero-actions {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-/* Buttons */
-.btn {
-  border-radius: var(--radius-full);
-  border: 1px solid transparent;
-  padding: 9px 18px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  background: transparent;
-  color: var(--fg);
-  transition: background 0.18s ease, color 0.18s ease,
-              border-color 0.18s ease, transform 0.08s ease;
-}
-
-.btn.primary {
-  background: linear-gradient(135deg, #ff7296, #ffb6c7);
-  color: #050505;
-  border-color: rgba(0, 0, 0, 0.8);
-  box-shadow: 0 14px 40px rgba(255, 150, 180, 0.55);
-}
-
-.btn.primary:hover {
-  transform: translateY(-1px);
-}
-
-.btn.ghost {
-  border-color: rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.02);
-  color: var(--fg-soft);
-}
-
-.btn.ghost:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--fg);
-}
-
-/* Meta row */
-.meta-row {
-  margin-top: 32px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  color: var(--fg-softer);
-  font-size: 0.82rem;
-}
-
-.meta-pill {
-  padding: 7px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.02);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.meta-pill .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: radial-gradient(circle at center, #ffb6c7, #e45c7a);
-}
-
-/* Katana section base */
-.section-katana {
-  margin-top: 80px;
-  position: relative;
-  overflow: hidden;
-  padding: 40px 0 64px;
-  border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent),
-              rgba(5, 5, 5, 0.96);
-}
-
-.katana-shell {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  text-align: center;
-  padding-inline: 18px;
-}
-
-.katana-title {
-  font-size: 1.6rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.katana-sub {
-  max-width: 28rem;
-  margin: 0 auto;
-  color: var(--fg-soft);
-  font-size: 0.9rem;
-}
-
-/* More realistic katana */
-.katana-wrap-real {
-  position: relative;
-  width: min(420px, 90vw);
-  height: 90px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Scabbard */
-.katana-scabbard {
-  position: absolute;
-  width: 100%;
-  height: 10px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #111, #1b1b1b, #111);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
-  opacity: 0.5;
-  transform: translateY(10px);
-}
-
-/* Blade */
-.katana-blade-real {
-  position: relative;
-  width: 100%;
-  height: 7px;
-  border-radius: 999px;
-  background:
-    linear-gradient(90deg,
-      rgba(220, 220, 220, 0.1),
-      rgba(255, 255, 255, 0.95),
-      rgba(210, 210, 210, 0.6));
-  box-shadow:
-    0 0 18px rgba(255, 255, 255, 0.28),
-    0 0 26px rgba(255, 170, 190, 0.45);
-}
-
-/* Guard (tsuba) */
-.katana-guard-real {
-  position: absolute;
-  left: 24%;
-  width: 20px;
-  height: 24px;
-  border-radius: 12px;
-  background:
-    radial-gradient(circle at 30% 10%, #ffe3ee, #ff8cb0 45%, #5b0f28 100%);
-  box-shadow:
-    0 0 14px rgba(255, 140, 180, 0.8),
-    0 0 20px rgba(255, 160, 200, 0.6);
-}
-
-/* Hilt core */
-.katana-hilt-real {
-  position: absolute;
-  left: 7%;
-  width: 90px;
-  height: 10px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #141414, #2a2a2a, #141414);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.85);
-}
-
-/* Handle wrap (ito pattern hint) */
-.katana-handle-wrap {
-  position: absolute;
-  left: 7%;
-  width: 90px;
-  height: 10px;
-  border-radius: 999px;
-  background-image:
-    linear-gradient(135deg, rgba(255, 182, 193, 0.26) 25%, transparent 25%,
-                    transparent 50%, rgba(255, 182, 193, 0.26) 50%,
-                    rgba(255, 182, 193, 0.26) 75%, transparent 75%, transparent);
-  background-size: 16px 16px;
-  mix-blend-mode: screen;
-  opacity: 0.8;
-}
-
-/* Sakura-style petals */
-.petal-field {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 0;
-}
-
-.petal {
-  position: absolute;
-  width: 16px;
-  height: 22px;
-  background: radial-gradient(circle at 30% 20%, #ffe9f1, #ffb6d0 55%, #f070a4 100%);
-  border-radius: 60% 40% 60% 40%;
-  opacity: 0.0;
-  filter: blur(0.2px);
-}
-
-.petal-1 { left: 10%; top: -10%; animation: petal-fall 18s linear infinite; }
-.petal-2 { left: 30%; top: -18%; animation: petal-fall 22s linear infinite 3s; }
-.petal-3 { left: 55%; top: -15%; animation: petal-fall 20s linear infinite 1.5s; }
-.petal-4 { left: 75%; top: -25%; animation: petal-fall 24s linear infinite 4s; }
-.petal-5 { left: 90%; top: -12%; animation: petal-fall 26s linear infinite 2.3s; }
-.petal-6 { left: 5%; top: -22%; animation: petal-fall 28s linear infinite 5s; }
-
-@keyframes petal-fall {
-  0% {
-    transform: translate3d(0, 0, 0) rotateZ(0deg) rotateX(0deg);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.9;
-  }
-  50% {
-    transform: translate3d(40px, 55vh, 0) rotateZ(80deg) rotateX(20deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translate3d(-10px, 100vh, 0) rotateZ(140deg) rotateX(-10deg);
-    opacity: 0;
-  }
-}
-
-/* Footer */
-.footer {
-  padding: 18px 0 26px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  margin-top: 16px;
-}
-
-.footer-inner {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 16px;
-  font-size: 0.8rem;
-  color: var(--fg-softer);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .shell {
-    padding: 84px 14px 48px;
-  }
-
-  .hero-card {
-    padding: 24px 18px 22px;
-    border-radius: 24px;
-  }
-
-  .hero-card h1 {
-    font-size: 1.9rem;
-  }
-
-  .nav-inner {
-    padding-inline: 14px;
-  }
-
-  .nav-links {
-    gap: 10px;
-    font-size: 0.8rem;
-  }
-
-  .section-katana {
-    margin-top: 60px;
-    padding: 32px 0 44px;
-  }
-
-  .katana-title {
-    font-size: 1.3rem;
-  }
-
-  .code-shell {
-    font-size: 0.75rem;
-  }
-}
+  <script src="script.js"></script>
+</body>
+</html>
