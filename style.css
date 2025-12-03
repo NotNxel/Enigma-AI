@@ -1,0 +1,206 @@
+/* Base layout */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #050505;
+  --bg-elevated: #101010;
+  --bg-soft: #151515;
+  --accent: #f5f5f5;
+  --accent-soft: #aaaaaa;
+  --accent-strong: #ffffff;
+  --border-subtle: #262626;
+  --highlight: #e94560;
+  --highlight-soft: rgba(233, 69, 96, 0.35);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-pill: 999px;
+  --shadow-soft: 0 0 40px rgba(0, 0, 0, 0.8);
+  --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Inter", "Segoe UI", sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top, #151515 0, #050505 45%, #000 100%);
+  color: var(--accent-soft);
+  font-family: var(--font-main);
+  min-height: 100%;
+}
+
+/* Navigation */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 5vw;
+  backdrop-filter: blur(22px);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.9),
+    rgba(0, 0, 0, 0.6),
+    transparent
+  );
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: radial-gradient(circle at 30% 0%, var(--highlight), #111);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 0 25px rgba(233, 69, 96, 0.4),
+    0 0 2px rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #fff;
+  letter-spacing: 0.08em;
+}
+
+.logo-text {
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: var(--accent-strong);
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.25rem;
+  font-size: 0.88rem;
+}
+
+.nav-link {
+  color: var(--accent-soft);
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.2s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--highlight);
+  border-radius: 999px;
+  transition: width 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--accent-strong);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+.nav-link.disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Hero layout */
+.page-main .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 3rem;
+  padding: 4rem 7vw 3rem;
+  align-items: center;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.75rem;
+  color: var(--accent-soft);
+  margin-bottom: 0.9rem;
+}
+
+.hero h1 {
+  color: var(--accent-strong);
+  font-size: 3rem;
+  line-height: 1.1;
+  margin: 0 0 1rem;
+}
+
+.hero-sub {
+  max-width: 32rem;
+  font-size: 0.98rem;
+  color: var(--accent-soft);
+  line-height: 1.6;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin: 1.75rem 0 0.75rem;
+}
+
+.tiny-note {
+  font-size: 0.78rem;
+  color: #6a6a6a;
+}
+
+/* Buttons */
+.btn {
+  cursor: pointer;
+  border-radius: var(--radius-pill);
+  padding: 0.6rem 1.3rem;
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--highlight), #f97b9a);
+  color: #050505;
+  box-shadow: 0 0 22px rgba(233, 69, 96, 0.7);
+}
+
+.btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 30px rgba(233, 69, 96, 0.9);
+}
+
+.btn.ghost {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: var(--accent-soft);
+}
+
+.btn.ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--accent-strong);
