@@ -147,6 +147,51 @@ body {
   gap: 18px;
 }
 
+/* Hero: code-style glass card */
+.hero-card-code {
+  gap: 18px;
+}
+
+.hero-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-pill {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--fg-soft);
+}
+
+.hero-pill .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: radial-gradient(circle at center, #ffb6c7, #e45c7a);
+}
+
+.hero-file {
+  font-size: 0.78rem;
+  color: var(--fg-softer);
+  font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  opacity: 0.9;
+}
+
+.hero-main-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .eyebrow {
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -164,6 +209,25 @@ body {
   margin: 0;
   color: var(--fg-soft);
   font-size: 0.98rem;
+}
+
+.code-shell {
+  margin: 0;
+  padding: 14px 14px 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: radial-gradient(circle at top left,
+              rgba(0, 0, 0, 0.8),
+              rgba(10, 10, 10, 0.96));
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.82);
+  overflow-x: auto;
+}
+
+.code-shell code {
+  font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  white-space: pre;
 }
 
 .hero-actions {
@@ -237,15 +301,15 @@ body {
   background: radial-gradient(circle at center, #ffb6c7, #e45c7a);
 }
 
-/* Katana + senbon */
+/* Katana section base */
 .section-katana {
   margin-top: 80px;
   position: relative;
   overflow: hidden;
-  padding: 40px 0 56px;
+  padding: 40px 0 64px;
   border-radius: 28px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.06), transparent),
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent),
               rgba(5, 5, 5, 0.96);
 }
 
@@ -273,54 +337,87 @@ body {
   font-size: 0.9rem;
 }
 
-/* Katana visual */
-.katana-wrap {
+/* More realistic katana */
+.katana-wrap-real {
   position: relative;
-  width: min(380px, 86vw);
-  height: 72px;
+  width: min(420px, 90vw);
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 0 18px rgba(255, 132, 132, 0.3));
 }
 
-.katana-blade {
-  width: 100%;
-  height: 5px;
-  border-radius: 999px;
-  background: linear-gradient(90deg,
-              rgba(255, 255, 255, 0.04),
-              rgba(255, 255, 255, 0.9),
-              rgba(255, 255, 255, 0.1));
-  box-shadow:
-    0 0 16px rgba(255, 255, 255, 0.2),
-    0 0 26px rgba(255, 102, 102, 0.4);
-}
-
-.katana-guard {
+/* Scabbard */
+.katana-scabbard {
   position: absolute;
-  left: 20%;
-  width: 12px;
-  height: 24px;
+  width: 100%;
+  height: 10px;
   border-radius: 999px;
-  background: radial-gradient(circle at center,
-              rgba(255, 140, 140, 0.95),
-              rgba(100, 16, 16, 1));
-  box-shadow: 0 0 16px rgba(255, 140, 140, 0.8);
+  background: linear-gradient(90deg, #111, #1b1b1b, #111);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+  opacity: 0.5;
+  transform: translateY(10px);
 }
 
-.katana-hilt {
+/* Blade */
+.katana-blade-real {
+  position: relative;
+  width: 100%;
+  height: 7px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg,
+      rgba(220, 220, 220, 0.1),
+      rgba(255, 255, 255, 0.95),
+      rgba(210, 210, 210, 0.6));
+  box-shadow:
+    0 0 18px rgba(255, 255, 255, 0.28),
+    0 0 26px rgba(255, 170, 190, 0.45);
+}
+
+/* Guard (tsuba) */
+.katana-guard-real {
+  position: absolute;
+  left: 24%;
+  width: 20px;
+  height: 24px;
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 30% 10%, #ffe3ee, #ff8cb0 45%, #5b0f28 100%);
+  box-shadow:
+    0 0 14px rgba(255, 140, 180, 0.8),
+    0 0 20px rgba(255, 160, 200, 0.6);
+}
+
+/* Hilt core */
+.katana-hilt-real {
   position: absolute;
   left: 7%;
-  width: 66px;
-  height: 9px;
+  width: 90px;
+  height: 10px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #141414, #3a3a3a);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  background: linear-gradient(90deg, #141414, #2a2a2a, #141414);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.85);
 }
 
-/* Senbon field */
-.senbon-field {
+/* Handle wrap (ito pattern hint) */
+.katana-handle-wrap {
+  position: absolute;
+  left: 7%;
+  width: 90px;
+  height: 10px;
+  border-radius: 999px;
+  background-image:
+    linear-gradient(135deg, rgba(255, 182, 193, 0.26) 25%, transparent 25%,
+                    transparent 50%, rgba(255, 182, 193, 0.26) 50%,
+                    rgba(255, 182, 193, 0.26) 75%, transparent 75%, transparent);
+  background-size: 16px 16px;
+  mix-blend-mode: screen;
+  opacity: 0.8;
+}
+
+/* Sakura-style petals */
+.petal-field {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -328,65 +425,38 @@ body {
   z-index: 0;
 }
 
-.senbon-layer {
+.petal {
   position: absolute;
-  inset: 0;
-  background-repeat: repeat;
-  background-size: 220px 220px;
+  width: 16px;
+  height: 22px;
+  background: radial-gradient(circle at 30% 20%, #ffe9f1, #ffb6d0 55%, #f070a4 100%);
+  border-radius: 60% 40% 60% 40%;
+  opacity: 0.0;
+  filter: blur(0.2px);
 }
 
-/* Bleach-style thin glowing blades */
-.senbon-layer-front {
-  opacity: 0.85;
-  background-image:
-    radial-gradient(1px 18px at 10% -20%, rgba(255, 190, 190, 0.95), transparent),
-    radial-gradient(1px 18px at 35% -10%, rgba(255, 220, 220, 0.9), transparent),
-    radial-gradient(1px 18px at 60% -30%, rgba(255, 170, 170, 0.95), transparent),
-    radial-gradient(1px 18px at 85% -5%, rgba(255, 210, 210, 0.9), transparent);
-  animation: senbon-front 22s linear infinite;
-}
+.petal-1 { left: 10%; top: -10%; animation: petal-fall 18s linear infinite; }
+.petal-2 { left: 30%; top: -18%; animation: petal-fall 22s linear infinite 3s; }
+.petal-3 { left: 55%; top: -15%; animation: petal-fall 20s linear infinite 1.5s; }
+.petal-4 { left: 75%; top: -25%; animation: petal-fall 24s linear infinite 4s; }
+.petal-5 { left: 90%; top: -12%; animation: petal-fall 26s linear infinite 2.3s; }
+.petal-6 { left: 5%; top: -22%; animation: petal-fall 28s linear infinite 5s; }
 
-.senbon-layer-mid {
-  opacity: 0.55;
-  background-image:
-    radial-gradient(1px 18px at 20% -25%, rgba(255, 170, 170, 0.7), transparent),
-    radial-gradient(1px 18px at 50% -15%, rgba(255, 210, 210, 0.65), transparent),
-    radial-gradient(1px 18px at 80% -40%, rgba(255, 190, 190, 0.6), transparent);
-  animation: senbon-mid 32s linear infinite;
-}
-
-.senbon-layer-back {
-  opacity: 0.35;
-  background-image:
-    radial-gradient(1px 18px at 30% -30%, rgba(255, 190, 190, 0.45), transparent),
-    radial-gradient(1px 18px at 70% -45%, rgba(255, 210, 210, 0.4), transparent);
-  animation: senbon-back 48s linear infinite;
-}
-
-@keyframes senbon-front {
+@keyframes petal-fall {
   0% {
-    transform: translate3d(0, -40%, 0);
+    transform: translate3d(0, 0, 0) rotateZ(0deg) rotateX(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate3d(40px, 55vh, 0) rotateZ(80deg) rotateX(20deg);
+    opacity: 1;
   }
   100% {
-    transform: translate3d(-8%, 55%, 0);
-  }
-}
-
-@keyframes senbon-mid {
-  0% {
-    transform: translate3d(0, -30%, 0);
-  }
-  100% {
-    transform: translate3d(4%, 50%, 0);
-  }
-}
-
-@keyframes senbon-back {
-  0% {
-    transform: translate3d(0, -20%, 0);
-  }
-  100% {
-    transform: translate3d(-4%, 40%, 0);
+    transform: translate3d(-10px, 100vh, 0) rotateZ(140deg) rotateX(-10deg);
+    opacity: 0;
   }
 }
 
@@ -436,5 +506,9 @@ body {
 
   .katana-title {
     font-size: 1.3rem;
+  }
+
+  .code-shell {
+    font-size: 0.75rem;
   }
 }
