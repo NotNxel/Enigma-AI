@@ -125,208 +125,235 @@
     </div>
   </footer>
 
-  <script>
-    // Year in footer
-    const y = document.getElementById("year");
-    if (y) y.textContent = new Date().getFullYear();
+ <script type="module">
+  // Firebase SDKs from CDN
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getAuth,
+    setPersistence,
+    browserLocalPersistence,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
-    // ---- Fake auth with localStorage (so user "stays logged in") ----
-    const STORAGE_KEY_USER = "enigmaUser";
-    const STORAGE_KEY_SPACES = "enigmaSpaces";
+  // Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyD_u4XQJYsY2UCyDcV1gBjWaTEribYy4po",
+    authDomain: "enigma-ai-2d0e4.firebaseapp.com",
+    projectId: "enigma-ai-2d0e4",
+    storageBucket: "enigma-ai-2d0e4.firebasestorage.app",
+    messagingSenderId: "11673613462",
+    appId: "1:11673613462:web:2280c969e603e645fdbeb7",
+    measurementId: "G-GMEWER0HLH"
+  };
 
-    const authSection = document.getElementById("auth-section");
-    const consoleSection = document.getElementById("console-section");
-    const accountChip = document.getElementById("account-chip");
-    const accountEmailSpan = document.getElementById("account-email");
-    const accountAvatarSpan = document.getElementById("account-avatar");
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
-    const authForm = document.getElementById("auth-form");
-    const tabs = document.querySelectorAll(".auth-tab");
-    const hint = document.getElementById("auth-hint");
-    const googleBtn = document.getElementById("google-btn");
+  // Keep user signed in across visits
+  setPersistence(auth, browserLocalPersistence);
 
-    const addSpaceBtn = document.getElementById("add-space-btn");
-    const spacesGrid = document.getElementById("spaces-grid");
+  // DOM refs
+  const authSection = document.getElementById("auth-section");
+  const consoleSection = document.getElementById("console-section");
+  const accountChip = document.getElementById("account-chip");
+  const accountEmailSpan = document.getElementById("account-email");
+  const accountAvatarSpan = document.getElementById("account-avatar");
 
-    let mode = "login";
+  const authForm = document.getElementById("auth-form");
+  const tabs = document.querySelectorAll(".auth-tab");
+  const hint = document.getElementById("auth-hint");
+  const googleBtn = document.getElementById("google-btn");
 
-    function getStoredUser() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY_USER);
-        return raw ? JSON.parse(raw) : null;
-      } catch {
-        return null;
-      }
+  const addSpaceBtn = document.getElementById("add-space-btn");
+  const spacesGrid = document.getElementById("spaces-grid");
+
+  let mode = "login";
+
+  // Spaces = chat areas, not users
+  const STORAGE_KEY_SPACES = "enigmaSpaces";
+
+  function getStoredSpaces() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_SPACES);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
     }
+  }
 
-    function setStoredUser(user) {
-      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
-    }
+  function setStoredSpaces(spaces) {
+    localStorage.setItem(STORAGE_KEY_SPACES, JSON.stringify(spaces));
+  }
 
-    function getStoredSpaces() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY_SPACES);
-        return raw ? JSON.parse(raw) : [];
-      } catch {
-        return [];
-      }
-    }
+  function renderSpaces() {
+    const spaces = getStoredSpaces();
+    spacesGrid.innerHTML = "";
 
-    function setStoredSpaces(spaces) {
-      localStorage.setItem(STORAGE_KEY_SPACES, JSON.stringify(spaces));
-    }
-
-    // UI toggles
-    function showConsoleForUser(user) {
-      authSection.style.display = "none";
-      consoleSection.style.display = "block";
-      accountChip.style.display = "inline-flex";
-
-      const email = user.email || "you@example.com";
-      accountEmailSpan.textContent = email;
-      accountAvatarSpan.textContent = email.charAt(0).toUpperCase() || "U";
-
-      renderSpaces();
-    }
-
-    function showAuth() {
-      authSection.style.display = "block";
-      consoleSection.style.display = "none";
-      accountChip.style.display = "none";
-    }
-
-    // Render spaces
-    function renderSpaces() {
-      const spaces = getStoredSpaces();
-      spacesGrid.innerHTML = "";
-
-      if (!spaces.length) {
-        // create one default space
-        const defaultSpace = {
-          id: Date.now(),
-          title: "Space 1",
-          content: ""
-        };
-        setStoredSpaces([defaultSpace]);
-        return renderSpaces();
-      }
-
-      spaces.forEach((space, index) => {
-        const card = document.createElement("article");
-        card.className = "space-card";
-
-        card.innerHTML = `
-          <header class="space-header">
-            <input
-              class="space-title-input"
-              value="${space.title || "Space " + (index + 1)}"
-            />
-            <button class="space-delete" title="Delete space">×</button>
-          </header>
-          <textarea
-            class="space-textarea"
-            placeholder="Describe the vibe, paste code, or write your idea…"
-          >${space.content || ""}</textarea>
-        `;
-
-        const titleInput = card.querySelector(".space-title-input");
-        const textarea = card.querySelector(".space-textarea");
-        const deleteBtn = card.querySelector(".space-delete");
-
-        titleInput.addEventListener("input", () => {
-          const updated = getStoredSpaces();
-          const target = updated.find((s) => s.id === space.id);
-          if (target) {
-            target.title = titleInput.value;
-            setStoredSpaces(updated);
-          }
-        });
-
-        textarea.addEventListener("input", () => {
-          const updated = getStoredSpaces();
-          const target = updated.find((s) => s.id === space.id);
-          if (target) {
-            target.content = textarea.value;
-            setStoredSpaces(updated);
-          }
-        });
-
-        deleteBtn.addEventListener("click", () => {
-          const updated = getStoredSpaces().filter((s) => s.id !== space.id);
-          setStoredSpaces(updated);
-          renderSpaces();
-        });
-
-        spacesGrid.appendChild(card);
-      });
-    }
-
-    function addNewSpace() {
-      const spaces = getStoredSpaces();
-      const nextIndex = spaces.length + 1;
-      spaces.push({
+    if (!spaces.length) {
+      const defaultSpace = {
         id: Date.now(),
-        title: "Space " + nextIndex,
+        title: "Space 1",
         content: ""
-      });
-      setStoredSpaces(spaces);
-      renderSpaces();
+      };
+      setStoredSpaces([defaultSpace]);
+      return renderSpaces();
     }
 
-    // Tab switching
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        tabs.forEach((t) => t.classList.remove("is-active"));
-        tab.classList.add("is-active");
-        mode = tab.dataset.mode || "login";
-        hint.textContent =
-          mode === "login"
-            ? "New here? Use Sign up to create an account."
-            : "Already have an account? Switch to Log in.";
+    spaces.forEach((space, index) => {
+      const card = document.createElement("article");
+      card.className = "space-card";
+
+      card.innerHTML = `
+        <header class="space-header">
+          <input
+            class="space-title-input"
+            value="${space.title || "Space " + (index + 1)}"
+          />
+          <button class="space-delete" title="Delete space">×</button>
+        </header>
+        <textarea
+          class="space-textarea"
+          placeholder="Talk to Enigma about this project, idea, or code…"
+        >${space.content || ""}</textarea>
+      `;
+
+      const titleInput = card.querySelector(".space-title-input");
+      const textarea = card.querySelector(".space-textarea");
+      const deleteBtn = card.querySelector(".space-delete");
+
+      titleInput.addEventListener("input", () => {
+        const updated = getStoredSpaces();
+        const target = updated.find((s) => s.id === space.id);
+        if (target) {
+          target.title = titleInput.value;
+          setStoredSpaces(updated);
+        }
       });
+
+      textarea.addEventListener("input", () => {
+        const updated = getStoredSpaces();
+        const target = updated.find((s) => s.id === space.id);
+        if (target) {
+          target.content = textarea.value;
+          setStoredSpaces(updated);
+        }
+      });
+
+      deleteBtn.addEventListener("click", () => {
+        const updated = getStoredSpaces().filter((s) => s.id !== space.id);
+        setStoredSpaces(updated);
+        renderSpaces();
+      });
+
+      spacesGrid.appendChild(card);
     });
+  }
 
-    // Fake login/signup (persists user locally so they "stay signed in")
-    authForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const email = document.getElementById("auth-email").value.trim();
-      const pwd = document.getElementById("auth-password").value.trim();
-      if (!email || !pwd) return;
-
-      const user = { email };
-      setStoredUser(user);
-      showConsoleForUser(user);
+  function addNewSpace() {
+    const spaces = getStoredSpaces();
+    const nextIndex = spaces.length + 1;
+    spaces.push({
+      id: Date.now(),
+      title: "Space " + nextIndex,
+      content: ""
     });
+    setStoredSpaces(spaces);
+    renderSpaces();
+  }
 
-    // Fake Google button
-    googleBtn.addEventListener("click", () => {
-      const email = "user@gmail.com";
-      const user = { email };
-      setStoredUser(user);
-      showConsoleForUser(user);
+  // UI helpers
+  function showConsoleForUser(user) {
+    authSection.style.display = "none";
+    consoleSection.style.display = "block";
+    accountChip.style.display = "inline-flex";
+
+    const email = user.email || "you@example.com";
+    accountEmailSpan.textContent = email;
+    accountAvatarSpan.textContent = (email.charAt(0) || "U").toUpperCase();
+
+    renderSpaces();
+  }
+
+  function showAuth() {
+    authSection.style.display = "block";
+    consoleSection.style.display = "none";
+    accountChip.style.display = "none";
+  }
+
+  // Tabs
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((t) => t.classList.remove("is-active"));
+      tab.classList.add("is-active");
+      mode = tab.dataset.mode || "login";
+      hint.textContent =
+        mode === "login"
+          ? "New here? Use Sign up to create an account."
+          : "Already have an account? Switch to Log in.";
     });
+  });
 
-    // Clicking account chip could later open a dropdown; for now, optional logout
-    accountChip.addEventListener("dblclick", () => {
-      if (confirm("Log out of Enigma AI on this device?")) {
-        localStorage.removeItem(STORAGE_KEY_USER);
-        // keep spaces, just hide console
-        showAuth();
+  // Email/password auth
+  authForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("auth-email").value.trim();
+    const pwd = document.getElementById("auth-password").value.trim();
+    if (!email || !pwd) return;
+
+    try {
+      let cred;
+      if (mode === "login") {
+        cred = await signInWithEmailAndPassword(auth, email, pwd);
+      } else {
+        cred = await createUserWithEmailAndPassword(auth, email, pwd);
       }
-    });
+      showConsoleForUser(cred.user);
+    } catch (err) {
+      alert(err.message || "Something went wrong with auth.");
+    }
+  });
 
-    // On load: if user exists, go straight to console
-    const existingUser = getStoredUser();
-    if (existingUser) {
-      showConsoleForUser(existingUser);
+  // Google sign-in
+  googleBtn.addEventListener("click", async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      showConsoleForUser(result.user);
+    } catch (err) {
+      alert(err.message || "Google sign-in failed.");
+    }
+  });
+
+  // Account chip: logout on double click
+  accountChip.addEventListener("dblclick", async () => {
+    if (confirm("Log out of Enigma on this device?")) {
+      await signOut(auth);
+    }
+  });
+
+  // Keep user logged in between visits
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      showConsoleForUser(user);
     } else {
       showAuth();
     }
+  });
 
-    // Add space button
-    if (addSpaceBtn) {
-      addSpaceBtn.addEventListener("click", addNewSpace);
-    }
-  </script>
+  // New space button
+  if (addSpaceBtn) {
+    addSpaceBtn.addEventListener("click", addNewSpace);
+  }
+
+  // Footer year (keep if not already set elsewhere)
+  const y = document.getElementById("year");
+  if (y) y.textContent = new Date().getFullYear();
+</script>
+
 </body>
 </html>
