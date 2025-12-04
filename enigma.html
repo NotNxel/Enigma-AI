@@ -1,3 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enigma – Console</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- NAV -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-mark logo-mark-four">
+          <span class="e-bar e-bar-1"></span>
+          <span class="e-bar e-bar-2"></span>
+          <span class="e-bar e-bar-3"></span>
+        </span>
+        <span class="logo-text">Enigma</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="enigma.html" class="is-active">Enigma</a>
+      </nav>
+      <button class="account-chip" id="account-chip" style="display:none;">
+        <span class="account-avatar" id="account-avatar">U</span>
+        <span class="account-email" id="account-email">you@example.com</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <!-- AUTH SECTION -->
+    <section class="hero hero-ai" id="auth-section">
+      <div class="hero-inner hero-two-col hero-ai-layout">
+        <div class="hero-left">
+          <p class="eyebrow">Enigma AI</p>
+          <h1>Sign in to your vibecoding lab.</h1>
+          <p class="hero-sub hero-sub-large">
+            One account for everything Enigma. Log in once, and your space stays ready.
+          </p>
+        </div>
+        <div class="hero-right">
+          <div class="auth-card">
+            <div class="auth-tabs">
+              <button class="auth-tab is-active" data-mode="login">Log in</button>
+              <button class="auth-tab" data-mode="signup">Sign up</button>
+            </div>
+            <form class="auth-form" id="auth-form">
+              <div class="field">
+                <label for="auth-email">Email</label>
+                <input type="email" id="auth-email" required placeholder="you@example.com" />
+              </div>
+              <div class="field">
+                <label for="auth-password">Password</label>
+                <input type="password" id="auth-password" required placeholder="••••••••" minlength="6" />
+              </div>
+              <button type="submit" class="btn primary auth-submit">Continue</button>
+              <p class="auth-or"><span></span><span>or</span><span></span></p>
+              <button type="button" class="btn auth-google" id="google-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="" class="google-icon-img" />
+                <span>Sign in with Google</span>
+              </button>
+              <p class="auth-hint" id="auth-hint">New here? Use Sign up to create an account.</p>
+            </form>
+          </div?
+
           </div>
         </div>
       </div>
