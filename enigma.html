@@ -1,69 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Enigma – Console</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <!-- NAV -->
-  <header class="nav">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
-        <span class="logo-mark logo-mark-four">
-          <span class="e-bar e-bar-1"></span>
-          <span class="e-bar e-bar-2"></span>
-          <span class="e-bar e-bar-3"></span>
-        </span>
-        <span class="logo-text">Enigma</span>
-      </a>
-      <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="enigma.html" class="is-active">Enigma</a>
-      </nav>
-      <button class="account-chip" id="account-chip" style="display:none;">
-        <span class="account-avatar" id="account-avatar">U</span>
-        <span class="account-email" id="account-email">you@example.com</span>
-      </button>
-    </div>
-  </header>
-
-  <main class="shell">
-    <!-- AUTH SECTION -->
-    <section class="hero hero-ai" id="auth-section">
-      <div class="hero-inner hero-two-col hero-ai-layout">
-        <div class="hero-left">
-          <p class="eyebrow">Enigma AI</p>
-          <h1>Sign in to your vibecoding lab.</h1>
-          <p class="hero-sub hero-sub-large">
-            One account for everything Enigma. Log in once, and your space stays ready.
-          </p>
-        </div>
-        <div class="hero-right">
-          <div class="auth-card">
-            <div class="auth-tabs">
-              <button class="auth-tab is-active" data-mode="login">Log in</button>
-              <button class="auth-tab" data-mode="signup">Sign up</button>
-            </div>
-            <form class="auth-form" id="auth-form">
-              <div class="field">
-                <label for="auth-email">Email</label>
-                <input type="email" id="auth-email" required placeholder="you@example.com" />
-              </div>
-              <div class="field">
-                <label for="auth-password">Password</label>
-                <input type="password" id="auth-password" required placeholder="••••••••" minlength="6" />
-              </div>
-              <button type="submit" class="btn primary auth-submit">Continue</button>
-              <p class="auth-or"><span></span><span>or</span><span></span></p>
-              <button type="button" class="btn auth-google" id="google-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="" class="google-icon-img" />
-                <span>Sign in with Google</span>
-              </button>
-              <p class="auth-hint" id="auth-hint">New here? Use Sign up to create an account.</p>
-            </form>
           </div>
         </div>
       </div>
@@ -78,21 +12,24 @@
         </div>
         <button class="btn ghost" id="new-space-btn">+ New Space</button>
       </header>
-      <div class="ai-console-content">
-        <div class="spaces-sidebar">
-          <div class="spaces-list" id="spaces-list"></div>
-        </div>
-        <div class="chat-main-container">
-          <div class="chat-main" id="chat-main">
-            <!-- Chat renders here -->
-          </div>
-        </div>
+
+      <!-- Split layout: left sidebar + right chat -->
+      <div class="ai-console-content" style="display:flex; height: calc(100vh - 160px); gap: 20px;">
+        <!-- Spaces sidebar -->
+        <nav class="spaces-sidebar" style="width: 280px; background: rgba(255,255,255,0.02); border-radius: 20px; padding: 16px; overflow-y: auto;">
+          <div id="spaces-list"></div>
+        </nav>
+
+        <!-- Main chat area -->
+        <main class="chat-main-container" style="flex: 1; background: rgba(255,255,255,0.02); border-radius: 28px; box-shadow: 0 0 40px rgba(0,0,0,0.6); display: flex; flex-direction: column; overflow: hidden;">
+          <div id="chat-main" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 20px;"></div>
+        </main>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="footer-inner">
+  <footer class="footer" style="margin-top: 16px;">
+    <div class="footer-inner" style="max-width: 1120px; margin: 0 auto; padding: 0 16px; font-size: 0.8rem; color: rgba(255,255,255,0.5);">
       <span>© <span id="year"></span> Enigma. The Unknown Awaits.</span>
     </div>
   </footer>
@@ -120,7 +57,6 @@
     const provider = new GoogleAuthProvider();
     setPersistence(auth, browserLocalPersistence);
 
-    // DOM Elements
     const authSection = document.getElementById("auth-section");
     const consoleSection = document.getElementById("console-section");
     const accountChip = document.getElementById("account-chip");
@@ -138,7 +74,6 @@
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     let mode = "login";
 
-    // Store chat spaces and selected index
     const STORAGE_KEY_SPACES = "enigmaSpaces";
     const STORAGE_KEY_SELECTED = "enigmaSelectedSpace";
 
@@ -164,15 +99,22 @@
       localStorage.setItem(STORAGE_KEY_SELECTED, idx);
     }
 
-    // Render left sidebar spaces list
     function renderSpacesList() {
       const spaces = getStoredSpaces();
+      const selectedIdx = getSelectedSpaceIndex();
+
       spacesList.innerHTML = "";
       spaces.forEach((space, idx) => {
         const el = document.createElement("div");
         el.className = "space-item";
-        if (idx === getSelectedSpaceIndex()) el.classList.add("active");
+        if (idx === selectedIdx) el.classList.add("active");
         el.textContent = space.title || `Space ${idx + 1}`;
+        el.style.padding = "12px 16px";
+        el.style.borderRadius = "20px";
+        el.style.background = idx === selectedIdx ? "rgba(255,255,255,0.12)" : "transparent";
+        el.style.cursor = "pointer";
+        el.style.marginBottom = "8px";
+        el.style.color = "var(--fg)";
         el.onclick = () => {
           setSelectedSpaceIndex(idx);
           renderSpacesList();
@@ -182,39 +124,58 @@
       });
     }
 
-    // Render chat area for selected space
     function renderChat() {
       const spaces = getStoredSpaces();
-      const idx = getSelectedSpaceIndex();
-      if (!spaces.length) return;
-      const space = spaces[idx];
+      const selectedIdx = getSelectedSpaceIndex();
+      if (!spaces.length || selectedIdx >= spaces.length) return;
+
+      const space = spaces[selectedIdx];
       chatMain.innerHTML = `
-        <div class="chat-header">
-          <div class="chat-title">${space.title}</div>
-          <button class="chat-space-menu">⋮⋮</button>
+        <div class="chat-header" style="display:flex;justify-content:space-between;align-items:center;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.08);">
+          <div style="font-size:1.4rem;font-weight:600;">${space.title}</div>
+          <button class="chat-space-menu" style="border:none;background:none;color:var(--fg-soft);font-size:1.2rem;cursor:pointer;">⋮⋮</button>
         </div>
-        <div class="chat-messages" id="main-chat-messages"></div>
-        <div class="chat-input-area">
-          <div class="chat-input-container">
-            <input class="chat-input-main" type="text" placeholder="Message Enigma..." />
-            <button class="chat-send-main">→</button>
+        <div class="chat-messages" id="main-chat-messages" style="flex-grow:1;overflow-y:auto;padding:16px 0;display:flex;flex-direction:column;gap:12px;"></div>
+        <div class="chat-input-area" style="padding-top:16px;">
+          <div class="chat-input-container" style="display:flex;gap:12px;">
+            <input class="chat-input-main" type="text" placeholder="Message Enigma..." style="flex:1;padding:14px 20px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);background:rgba(10,10,10,0.9);color:var(--fg);font-size:1rem;outline:none;" />
+            <button class="chat-send-main" style="width:56px;height:56px;border-radius:999px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;cursor:pointer;font-size:1.4rem;font-weight:700;transition:transform .15s ease;">→</button>
           </div>
         </div>
       `;
+
       const messagesEl = document.getElementById("main-chat-messages");
       const inputEl = chatMain.querySelector(".chat-input-main");
       const sendBtn = chatMain.querySelector(".chat-send-main");
 
-      // Clear then render messages
       messagesEl.innerHTML = "";
       (space.messages || []).forEach((msg) => {
         const row = document.createElement("div");
-        row.className = `chat-msg ${msg.from}`;
-        row.innerHTML = `<div class="chat-bubble ${msg.from}">${msg.text}</div>`;
+        row.style.display = "flex";
+        row.style.justifyContent = msg.from === "user" ? "flex-end" : "flex-start";
+        const bubble = document.createElement("div");
+        bubble.textContent = msg.text;
+        bubble.style.maxWidth = "70%";
+        bubble.style.padding = "12px 20px";
+        bubble.style.borderRadius = "24px";
+        bubble.style.fontSize = "1rem";
+        bubble.style.lineHeight = "1.4";
+        bubble.style.whiteSpace = "pre-wrap";
+        if (msg.from === "user") {
+          bubble.style.background = "rgba(255, 255, 255, 0.2)";
+          bubble.style.color = "var(--fg)";
+          bubble.style.borderRadius = "24px 24px 8px 24px";
+          bubble.style.border = "1px solid rgba(255,255,255,0.2)";
+        } else {
+          bubble.style.background = "rgba(10, 10, 10, 0.95)";
+          bubble.style.color = "var(--fg-soft)";
+          bubble.style.borderRadius = "24px 24px 24px 8px";
+          bubble.style.border = "1px solid rgba(255,255,255,0.1)";
+        }
+        row.appendChild(bubble);
         messagesEl.appendChild(row);
       });
 
-      // Scroll to bottom
       messagesEl.scrollTop = messagesEl.scrollHeight;
 
       function handleSend() {
@@ -224,7 +185,7 @@
         space.messages.push({ from: "user", text });
         space.messages.push({
           from: "ai",
-          text: `Enigma (placeholder): "${text}"\n\nReal model coming soon...`
+          text: `Enigma (placeholder): "${text}"\n\nModel coming soon...`
         });
         setStoredSpaces(spaces);
         inputEl.value = "";
@@ -248,7 +209,6 @@
       accountEmailSpan.textContent = email;
       accountAvatarSpan.textContent = (email.charAt(0) || "U").toUpperCase();
 
-      // If no spaces, create default one
       if (getStoredSpaces().length === 0) {
         setStoredSpaces([{ title: "Enigma Chat", messages: [] }]);
       }
@@ -263,16 +223,13 @@
       accountChip.style.display = "none";
     }
 
-    // Auth tab switching
+    // Auth tabs switching
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
         tabs.forEach((t) => t.classList.remove("is-active"));
         tab.classList.add("is-active");
         mode = tab.dataset.mode || "login";
-        hint.textContent =
-          mode === "login"
-            ? "New here? Use Sign up to create an account."
-            : "Already have an account? Switch to Log in.";
+        hint.textContent = mode === "login" ? "New here? Use Sign up to create an account." : "Already have an account? Switch to Log in.";
       });
     });
 
@@ -305,12 +262,12 @@
       }
     });
 
-    // Logout
+    // Logout double click
     accountChip.addEventListener("dblclick", async () => {
       if (confirm("Log out?")) await signOut(auth);
     });
 
-    // Auth state listener
+    // Listen for auth state change
     onAuthStateChanged(auth, (user) => {
       if (user) showConsoleForUser(user);
       else showAuth();
