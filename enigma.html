@@ -23,8 +23,6 @@
         <a href="about.html">About</a>
         <a href="enigma.html" class="is-active">Enigma</a>
       </nav>
-
-      <!-- Account chip (hidden until logged in) -->
       <button class="account-chip" id="account-chip" style="display:none;">
         <span class="account-avatar" id="account-avatar">U</span>
         <span class="account-email" id="account-email">you@example.com</span>
@@ -40,62 +38,31 @@
           <p class="eyebrow">Enigma AI</p>
           <h1>Sign in to your vibecoding lab.</h1>
           <p class="hero-sub hero-sub-large">
-            One account for everything Enigma. Log in once, and your spaces stay ready for the next session.
+            One account for everything Enigma. Log in once, and your space stays ready.
           </p>
         </div>
-
-        <!-- Auth card -->
         <div class="hero-right">
           <div class="auth-card">
             <div class="auth-tabs">
               <button class="auth-tab is-active" data-mode="login">Log in</button>
               <button class="auth-tab" data-mode="signup">Sign up</button>
             </div>
-
             <form class="auth-form" id="auth-form">
               <div class="field">
                 <label for="auth-email">Email</label>
-                <input
-                  type="email"
-                  id="auth-email"
-                  required
-                  placeholder="you@example.com"
-                />
+                <input type="email" id="auth-email" required placeholder="you@example.com" />
               </div>
               <div class="field">
                 <label for="auth-password">Password</label>
-                <input
-                  type="password"
-                  id="auth-password"
-                  required
-                  placeholder="••••••••"
-                  minlength="6"
-                />
+                <input type="password" id="auth-password" required placeholder="••••••••" minlength="6" />
               </div>
-
-              <button type="submit" class="btn primary auth-submit">
-                Continue
-              </button>
-
-              <p class="auth-or">
-                <span></span>
-                <span>or</span>
-                <span></span>
-              </p>
-
-              <!-- Google sign-in button with online logo -->
+              <button type="submit" class="btn primary auth-submit">Continue</button>
+              <p class="auth-or"><span></span><span>or</span><span></span></p>
               <button type="button" class="btn auth-google" id="google-btn">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-                  alt=""
-                  class="google-icon-img"
-                />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="" class="google-icon-img" />
                 <span>Sign in with Google</span>
               </button>
-
-              <p class="auth-hint" id="auth-hint">
-                New here? Use Sign up to create an account.
-              </p>
+              <p class="auth-hint" id="auth-hint">New here? Use Sign up to create an account.</p>
             </form>
           </div>
         </div>
@@ -107,17 +74,11 @@
       <header class="ai-console-header">
         <div>
           <p class="eyebrow">Enigma AI Console</p>
-          <h1>Your vibecoding spaces.</h1>
-          <p class="hero-sub hero-sub-large">
-            Create different spaces for projects, experiments, or late‑night ideas to talk to your AI.
-          </p>
+          <h1>Talk to Enigma.</h1>
+          <p class="hero-sub hero-sub-large">Your AI coding companion for projects and ideas.</p>
         </div>
-        <button class="btn ghost" id="add-space-btn">New space</button>
       </header>
-
-      <div class="spaces-grid" id="spaces-grid">
-        <!-- Spaces injected by JS -->
-      </div>
+      <div class="spaces-grid" id="spaces-grid"></div>
     </section>
   </main>
 
@@ -127,22 +88,14 @@
     </div>
   </footer>
 
-  <!-- Firebase + app logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
     import {
-      getAuth,
-      setPersistence,
-      browserLocalPersistence,
-      onAuthStateChanged,
-      signInWithEmailAndPassword,
-      createUserWithEmailAndPassword,
-      GoogleAuthProvider,
-      signInWithPopup,
-      signOut
+      getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged,
+      signInWithEmailAndPassword, createUserWithEmailAndPassword,
+      GoogleAuthProvider, signInWithPopup, signOut
     } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
-    // Your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyD_u4XQJYsY2UCyDcV1gBjWaTEribYy4po",
       authDomain: "enigma-ai-2d0e4.firebaseapp.com",
@@ -156,260 +109,108 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
-
-    // Persist login
     setPersistence(auth, browserLocalPersistence);
 
-    // DOM refs
+    // DOM elements
     const authSection = document.getElementById("auth-section");
     const consoleSection = document.getElementById("console-section");
     const accountChip = document.getElementById("account-chip");
     const accountEmailSpan = document.getElementById("account-email");
     const accountAvatarSpan = document.getElementById("account-avatar");
-
     const authForm = document.getElementById("auth-form");
     const tabs = document.querySelectorAll(".auth-tab");
     const hint = document.getElementById("auth-hint");
     const googleBtn = document.getElementById("google-btn");
-
-    const addSpaceBtn = document.getElementById("add-space-btn");
     const spacesGrid = document.getElementById("spaces-grid");
-
     const yearSpan = document.getElementById("year");
-    if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
+    if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     let mode = "login";
 
-    // Spaces = chat areas
-    const STORAGE_KEY_SPACES = "enigmaSpaces";
+    // Chat storage
+    const STORAGE_KEY_CHAT = "enigmaChat";
 
-    function getStoredSpaces() {
+    function getStoredChat() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY_SPACES);
-        return raw ? JSON.parse(raw) : [];
+        const raw = localStorage.getItem(STORAGE_KEY_CHAT);
+        return raw ? JSON.parse(raw) : { title: "Enigma Chat", messages: [] };
       } catch {
-        return [];
+        return { title: "Enigma Chat", messages: [] };
       }
     }
 
-    function setStoredSpaces(spaces) {
-      localStorage.setItem(STORAGE_KEY_SPACES, JSON.stringify(spaces));
+    function setStoredChat(chat) {
+      localStorage.setItem(STORAGE_KEY_CHAT, JSON.stringify(chat));
     }
 
-    function renderSpaces() {
-  const spaces = getStoredSpaces();
-  spacesGrid.innerHTML = "";
-
-  if (!spaces.length) {
-    const defaultSpace = {
-      id: Date.now(),
-      title: "Enigma Chat",
-      messages: []
-    };
-    setStoredSpaces([defaultSpace]);
-    return renderSpaces();
-  }
-
-  // Show only the FIRST space (main chat) - ChatGPT style
-  const activeSpace = spaces[0];
-  
-  const chatContainer = document.createElement("div");
-  chatContainer.className = "chat-main";
-  
-  chatContainer.innerHTML = `
-    <div class="chat-header">
-      <div class="chat-title">${activeSpace.title}</div>
-      <button class="chat-space-menu">⋮⋮</button>
-    </div>
-    
-    <div class="chat-messages" id="main-chat-messages"></div>
-    
-    <div class="chat-input-area">
-      <div class="chat-input-container">
-        <input class="chat-input-main" type="text" placeholder="Message Enigma..." />
-        <button class="chat-send-main">→</button>
-      </div>
-    </div>
-  `;
-
-  const messagesEl = chatContainer.querySelector("#main-chat-messages");
-  const inputEl = chatContainer.querySelector(".chat-input-main");
-  const sendBtn = chatContainer.querySelector(".chat-send-main");
-
-  // Render messages
-  (activeSpace.messages || []).forEach((msg) => {
-    const row = document.createElement("div");
-    row.className = `chat-msg ${msg.from}`;
-    row.innerHTML = `<div class="chat-bubble ${msg.from}">${msg.text}</div>`;
-    messagesEl.appendChild(row);
-  });
-
-  function scrollToBottom() {
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
-
-  function handleSend() {
-    const text = inputEl.value.trim();
-    if (!text) return;
-
-    activeSpace.messages = activeSpace.messages || [];
-    activeSpace.messages.push({ from: "user", text });
-    
-    // Fake AI reply
-    activeSpace.messages.push({
-      from: "ai", 
-      text: `Enigma: "${text}"\n\nReal model coming soon...`
-    });
-
-    setStoredSpaces(spaces);
-    renderSpaces();
-  }
-
-  sendBtn.addEventListener("click", handleSend);
-  inputEl.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-      inputEl.value = "";
-    }
-  });
-
-  spacesGrid.appendChild(chatContainer);
-  scrollToBottom();
-}
-
-      spaces.forEach((space, index) => {
-        const card = document.createElement("article");
-        card.className = "space-card";
-
-        card.innerHTML = `
-          <header class="space-header">
-            <input
-              class="space-title-input"
-              value="${space.title || "Space " + (index + 1)}"
-            />
-            <button class="space-delete" title="Delete space">×</button>
-          </header>
-
-          <div class="space-chat">
-            <div class="space-messages"></div>
-            <div class="space-input-row">
-              <input
-                class="space-input"
-                type="text"
-                placeholder="Talk to Enigma about this code, idea, or bug…"
-              />
-              <button class="space-send-btn">Send</button>
+    function renderChat() {
+      const chat = getStoredChat();
+      spacesGrid.innerHTML = `
+        <div class="chat-main">
+          <div class="chat-header">
+            <div class="chat-title">${chat.title}</div>
+            <button class="chat-space-menu">⋮⋮</button>
+          </div>
+          <div class="chat-messages" id="main-chat-messages"></div>
+          <div class="chat-input-area">
+            <div class="chat-input-container">
+              <input class="chat-input-main" type="text" placeholder="Message Enigma..." />
+              <button class="chat-send-main">→</button>
             </div>
           </div>
-        `;
+        </div>
+      `;
 
-        const titleInput = card.querySelector(".space-title-input");
-        const deleteBtn = card.querySelector(".space-delete");
-        const messagesEl = card.querySelector(".space-messages");
-        const inputEl = card.querySelector(".space-input");
-        const sendBtn = card.querySelector(".space-send-btn");
+      const messagesEl = document.getElementById("main-chat-messages");
+      const inputEl = spacesGrid.querySelector(".chat-input-main");
+      const sendBtn = spacesGrid.querySelector(".chat-send-main");
 
-        // render existing messages
-        (space.messages || []).forEach((msg) => {
-          const row = document.createElement("div");
-          row.className = "msg-row " + (msg.from === "user" ? "user" : "ai");
-          const bubble = document.createElement("div");
-          bubble.className = "msg-bubble " + (msg.from === "user" ? "user" : "ai");
-          bubble.textContent = msg.text;
-          row.appendChild(bubble);
-          messagesEl.appendChild(row);
-        });
-
-        function saveMessages(newMessages) {
-          const updated = getStoredSpaces();
-          const target = updated.find((s) => s.id === space.id);
-          if (target) {
-            target.messages = newMessages;
-            setStoredSpaces(updated);
-          }
-        }
-
-        function scrollMessagesToBottom() {
-          messagesEl.scrollTop = messagesEl.scrollHeight;
-        }
-
-        function handleSend() {
-          const text = inputEl.value.trim();
-          if (!text) return;
-
-          const currentSpaces = getStoredSpaces();
-          const target = currentSpaces.find((s) => s.id === space.id);
-          if (!target) return;
-
-          target.messages = target.messages || [];
-          // user message
-          target.messages.push({ from: "user", text });
-
-          // fake AI reply for now
-          target.messages.push({
-            from: "ai",
-            text:
-              'Enigma (placeholder): "' +
-              text +
-              '"\n\nWhen the model is wired, this will be a real response.'
-          });
-
-          setStoredSpaces(currentSpaces);
-          renderSpaces();
-        }
-
-        titleInput.addEventListener("input", () => {
-          const updated = getStoredSpaces();
-          const target = updated.find((s) => s.id === space.id);
-          if (target) {
-            target.title = titleInput.value;
-            setStoredSpaces(updated);
-          }
-        });
-
-        deleteBtn.addEventListener("click", () => {
-          const updated = getStoredSpaces().filter((s) => s.id !== space.id);
-          setStoredSpaces(updated);
-          renderSpaces();
-        });
-
-        sendBtn.addEventListener("click", handleSend);
-        inputEl.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            handleSend();
-          }
-        });
-
-        spacesGrid.appendChild(card);
-        scrollMessagesToBottom();
+      // Render messages
+      chat.messages.forEach((msg) => {
+        const row = document.createElement("div");
+        row.className = `chat-msg ${msg.from}`;
+        row.innerHTML = `<div class="chat-bubble ${msg.from}">${msg.text}</div>`;
+        messagesEl.appendChild(row);
       });
+
+      function scrollToBottom() {
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      function handleSend() {
+        const text = inputEl.value.trim();
+        if (!text) return;
+
+        const currentChat = getStoredChat();
+        currentChat.messages.push({ from: "user", text });
+        currentChat.messages.push({
+          from: "ai",
+          text: `Enigma: "${text}"\n\nReal model response coming soon...`
+        });
+        setStoredChat(currentChat);
+        inputEl.value = "";
+        renderChat();
+      }
+
+      sendBtn.addEventListener("click", handleSend);
+      inputEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          handleSend();
+        }
+      });
+
+      scrollToBottom();
     }
 
-    function addNewSpace() {
-      const spaces = getStoredSpaces();
-      const nextIndex = spaces.length + 1;
-      spaces.push({
-        id: Date.now(),
-        title: "Space " + nextIndex,
-        messages: []
-      });
-      setStoredSpaces(spaces);
-      renderSpaces();
-    }
-
-    // UI helpers
     function showConsoleForUser(user) {
       authSection.style.display = "none";
       consoleSection.style.display = "block";
       accountChip.style.display = "inline-flex";
-
-      const email = user.email || "you@example.com";
+      const email = user.email || "user@example.com";
       accountEmailSpan.textContent = email;
       accountAvatarSpan.textContent = (email.charAt(0) || "U").toUpperCase();
-
-      renderSpaces();
+      renderChat();
     }
 
     function showAuth() {
@@ -418,20 +219,19 @@
       accountChip.style.display = "none";
     }
 
-    // Tabs
+    // Tab switching
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
         tabs.forEach((t) => t.classList.remove("is-active"));
         tab.classList.add("is-active");
         mode = tab.dataset.mode || "login";
-        hint.textContent =
-          mode === "login"
-            ? "New here? Use Sign up to create an account."
-            : "Already have an account? Switch to Log in.";
+        hint.textContent = mode === "login" 
+          ? "New here? Use Sign up to create an account." 
+          : "Already have an account? Switch to Log in.";
       });
     });
 
-    // Email/password auth
+    // Email/Password auth
     authForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("auth-email").value.trim();
@@ -447,11 +247,11 @@
         }
         showConsoleForUser(cred.user);
       } catch (err) {
-        alert(err.message || "Something went wrong with auth.");
+        alert(err.message || "Auth failed.");
       }
     });
 
-    // Google sign-in
+    // Google auth
     googleBtn.addEventListener("click", async () => {
       try {
         const result = await signInWithPopup(auth, provider);
@@ -461,25 +261,16 @@
       }
     });
 
-    // Logout on double-click of account chip
+    // Logout
     accountChip.addEventListener("dblclick", async () => {
-      if (confirm("Log out of Enigma on this device?")) {
-        await signOut(auth);
-      }
+      if (confirm("Log out?")) await signOut(auth);
     });
 
-    // Persisted login
+    // Auth state listener
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        showConsoleForUser(user);
-      } else {
-        showAuth();
-      }
+      if (user) showConsoleForUser(user);
+      else showAuth();
     });
-
-    if (addSpaceBtn) {
-      addSpaceBtn.addEventListener("click", addNewSpace);
-    }
   </script>
 </body>
 </html>
