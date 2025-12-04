@@ -880,3 +880,68 @@ body {
   padding: 2px;
   object-fit: contain;
 }
+/* ===== ENIGMA AI CONSOLE - ADD THESE TO END ===== */
+
+/* Account chip in nav */
+.account-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(10, 10, 10, 0.9);
+  color: var(--fg-soft);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.account-chip:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--fg);
+}
+
+.account-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 0% 0%, #444, #111);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* AI page */
+.hero-ai {
+  min-height: calc(100vh - 130px);
+}
+
+.hero-ai-layout {
+  align-items: center;
+}
+
+.auth-card {
+  width: min(380px, 100%);
+  padding: 20px 20px 18px;
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.12), rgba(15, 15, 15, 0.96));
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-soft);
+}
+
+.auth-tabs {
+  display: inline-flex;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 3px;
+  margin-bottom: 16px;
+}
+
+.auth-tab {
+  border: none;
+  background: transparent;
+  padding: 7px 16px;
+  border-radius: 999px
