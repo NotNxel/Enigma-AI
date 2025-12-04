@@ -197,18 +197,86 @@
     }
 
     function renderSpaces() {
-      const spaces = getStoredSpaces();
-      spacesGrid.innerHTML = "";
+  const spaces = getStoredSpaces();
+  spacesGrid.innerHTML = "";
 
-      if (!spaces.length) {
-        const defaultSpace = {
-          id: Date.now(),
-          title: "Space 1",
-          messages: []
-        };
-        setStoredSpaces([defaultSpace]);
-        return renderSpaces();
-      }
+  if (!spaces.length) {
+    const defaultSpace = {
+      id: Date.now(),
+      title: "Enigma Chat",
+      messages: []
+    };
+    setStoredSpaces([defaultSpace]);
+    return renderSpaces();
+  }
+
+  // Show only the FIRST space (main chat) - ChatGPT style
+  const activeSpace = spaces[0];
+  
+  const chatContainer = document.createElement("div");
+  chatContainer.className = "chat-main";
+  
+  chatContainer.innerHTML = `
+    <div class="chat-header">
+      <div class="chat-title">${activeSpace.title}</div>
+      <button class="chat-space-menu">⋮⋮</button>
+    </div>
+    
+    <div class="chat-messages" id="main-chat-messages"></div>
+    
+    <div class="chat-input-area">
+      <div class="chat-input-container">
+        <input class="chat-input-main" type="text" placeholder="Message Enigma..." />
+        <button class="chat-send-main">→</button>
+      </div>
+    </div>
+  `;
+
+  const messagesEl = chatContainer.querySelector("#main-chat-messages");
+  const inputEl = chatContainer.querySelector(".chat-input-main");
+  const sendBtn = chatContainer.querySelector(".chat-send-main");
+
+  // Render messages
+  (activeSpace.messages || []).forEach((msg) => {
+    const row = document.createElement("div");
+    row.className = `chat-msg ${msg.from}`;
+    row.innerHTML = `<div class="chat-bubble ${msg.from}">${msg.text}</div>`;
+    messagesEl.appendChild(row);
+  });
+
+  function scrollToBottom() {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function handleSend() {
+    const text = inputEl.value.trim();
+    if (!text) return;
+
+    activeSpace.messages = activeSpace.messages || [];
+    activeSpace.messages.push({ from: "user", text });
+    
+    // Fake AI reply
+    activeSpace.messages.push({
+      from: "ai", 
+      text: `Enigma: "${text}"\n\nReal model coming soon...`
+    });
+
+    setStoredSpaces(spaces);
+    renderSpaces();
+  }
+
+  sendBtn.addEventListener("click", handleSend);
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+      inputEl.value = "";
+    }
+  });
+
+  spacesGrid.appendChild(chatContainer);
+  scrollToBottom();
+}
 
       spaces.forEach((space, index) => {
         const card = document.createElement("article");
