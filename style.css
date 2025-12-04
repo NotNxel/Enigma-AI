@@ -681,3 +681,132 @@ body {
     font-size: 0.75rem;
   }
 }
+/* Account chip in nav */
+.account-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(10, 10, 10, 0.9);
+  color: var(--fg-soft);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.account-chip:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--fg);
+}
+
+.account-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 0% 0%, #444, #111);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+/* AI console layout */
+.ai-console {
+  margin-top: 40px;
+}
+
+.ai-console-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.spaces-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* Space cards */
+.space-card {
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: radial-gradient(circle at top left,
+              rgba(255, 255, 255, 0.06),
+              rgba(10, 10, 10, 0.96));
+  backdrop-filter: blur(18px);
+  padding: 12px 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.space-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.space-title-input {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(5, 5, 5, 0.9);
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  color: var(--fg);
+  outline: none;
+}
+
+.space-title-input:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.space-delete {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(40, 40, 40, 0.9);
+  color: var(--fg-softer);
+  width: 26px;
+  height: 26px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.space-delete:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--fg);
+}
+
+.space-textarea {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(5, 5, 5, 0.95);
+  padding: 10px;
+  min-height: 140px;
+  resize: vertical;
+  font-size: 0.85rem;
+  color: var(--fg);
+  font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  outline: none;
+}
+
+.space-textarea:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive for AI console */
+@media (max-width: 900px) {
+  .spaces-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-console-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
