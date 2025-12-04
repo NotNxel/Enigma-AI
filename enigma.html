@@ -75,10 +75,19 @@
         <div>
           <p class="eyebrow">Enigma AI Console</p>
           <h1>Talk to Enigma.</h1>
-          <p class="hero-sub hero-sub-large">Your AI coding companion for projects and ideas.</p>
         </div>
+        <button class="btn ghost" id="new-space-btn">+ New Space</button>
       </header>
-      <div class="spaces-grid" id="spaces-grid"></div>
+      <div class="ai-console-content">
+        <div class="spaces-sidebar">
+          <div class="spaces-list" id="spaces-list"></div>
+        </div>
+        <div class="chat-main-container">
+          <div class="chat-main" id="chat-main">
+            <!-- Chat renders here -->
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -111,7 +120,7 @@
     const provider = new GoogleAuthProvider();
     setPersistence(auth, browserLocalPersistence);
 
-    // DOM elements
+    // DOM Elements
     const authSection = document.getElementById("auth-section");
     const consoleSection = document.getElementById("console-section");
     const accountChip = document.getElementById("account-chip");
@@ -121,86 +130,114 @@
     const tabs = document.querySelectorAll(".auth-tab");
     const hint = document.getElementById("auth-hint");
     const googleBtn = document.getElementById("google-btn");
-    const spacesGrid = document.getElementById("spaces-grid");
+    const spacesList = document.getElementById("spaces-list");
+    const chatMain = document.getElementById("chat-main");
+    const newSpaceBtn = document.getElementById("new-space-btn");
     const yearSpan = document.getElementById("year");
 
     if (yearSpan) yearSpan.textContent = new Date().getFullYear();
     let mode = "login";
 
-    // Chat storage
-    const STORAGE_KEY_CHAT = "enigmaChat";
+    // Store chat spaces and selected index
+    const STORAGE_KEY_SPACES = "enigmaSpaces";
+    const STORAGE_KEY_SELECTED = "enigmaSelectedSpace";
 
-    function getStoredChat() {
+    function getStoredSpaces() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY_CHAT);
-        return raw ? JSON.parse(raw) : { title: "Enigma Chat", messages: [] };
+        const raw = localStorage.getItem(STORAGE_KEY_SPACES);
+        return raw ? JSON.parse(raw) : [];
       } catch {
-        return { title: "Enigma Chat", messages: [] };
+        return [];
       }
     }
 
-    function setStoredChat(chat) {
-      localStorage.setItem(STORAGE_KEY_CHAT, JSON.stringify(chat));
+    function setStoredSpaces(spaces) {
+      localStorage.setItem(STORAGE_KEY_SPACES, JSON.stringify(spaces));
     }
 
+    function getSelectedSpaceIndex() {
+      const idx = localStorage.getItem(STORAGE_KEY_SELECTED);
+      return idx !== null ? Number(idx) : 0;
+    }
+
+    function setSelectedSpaceIndex(idx) {
+      localStorage.setItem(STORAGE_KEY_SELECTED, idx);
+    }
+
+    // Render left sidebar spaces list
+    function renderSpacesList() {
+      const spaces = getStoredSpaces();
+      spacesList.innerHTML = "";
+      spaces.forEach((space, idx) => {
+        const el = document.createElement("div");
+        el.className = "space-item";
+        if (idx === getSelectedSpaceIndex()) el.classList.add("active");
+        el.textContent = space.title || `Space ${idx + 1}`;
+        el.onclick = () => {
+          setSelectedSpaceIndex(idx);
+          renderSpacesList();
+          renderChat();
+        };
+        spacesList.appendChild(el);
+      });
+    }
+
+    // Render chat area for selected space
     function renderChat() {
-      const chat = getStoredChat();
-      spacesGrid.innerHTML = `
-        <div class="chat-main">
-          <div class="chat-header">
-            <div class="chat-title">${chat.title}</div>
-            <button class="chat-space-menu">⋮⋮</button>
-          </div>
-          <div class="chat-messages" id="main-chat-messages"></div>
-          <div class="chat-input-area">
-            <div class="chat-input-container">
-              <input class="chat-input-main" type="text" placeholder="Message Enigma..." />
-              <button class="chat-send-main">→</button>
-            </div>
+      const spaces = getStoredSpaces();
+      const idx = getSelectedSpaceIndex();
+      if (!spaces.length) return;
+      const space = spaces[idx];
+      chatMain.innerHTML = `
+        <div class="chat-header">
+          <div class="chat-title">${space.title}</div>
+          <button class="chat-space-menu">⋮⋮</button>
+        </div>
+        <div class="chat-messages" id="main-chat-messages"></div>
+        <div class="chat-input-area">
+          <div class="chat-input-container">
+            <input class="chat-input-main" type="text" placeholder="Message Enigma..." />
+            <button class="chat-send-main">→</button>
           </div>
         </div>
       `;
-
       const messagesEl = document.getElementById("main-chat-messages");
-      const inputEl = spacesGrid.querySelector(".chat-input-main");
-      const sendBtn = spacesGrid.querySelector(".chat-send-main");
+      const inputEl = chatMain.querySelector(".chat-input-main");
+      const sendBtn = chatMain.querySelector(".chat-send-main");
 
-      // Render messages
-      chat.messages.forEach((msg) => {
+      // Clear then render messages
+      messagesEl.innerHTML = "";
+      (space.messages || []).forEach((msg) => {
         const row = document.createElement("div");
         row.className = `chat-msg ${msg.from}`;
         row.innerHTML = `<div class="chat-bubble ${msg.from}">${msg.text}</div>`;
         messagesEl.appendChild(row);
       });
 
-      function scrollToBottom() {
-        messagesEl.scrollTop = messagesEl.scrollHeight;
-      }
+      // Scroll to bottom
+      messagesEl.scrollTop = messagesEl.scrollHeight;
 
       function handleSend() {
         const text = inputEl.value.trim();
         if (!text) return;
-
-        const currentChat = getStoredChat();
-        currentChat.messages.push({ from: "user", text });
-        currentChat.messages.push({
+        space.messages = space.messages || [];
+        space.messages.push({ from: "user", text });
+        space.messages.push({
           from: "ai",
-          text: `Enigma: "${text}"\n\nReal model response coming soon...`
+          text: `Enigma (placeholder): "${text}"\n\nReal model coming soon...`
         });
-        setStoredChat(currentChat);
+        setStoredSpaces(spaces);
         inputEl.value = "";
         renderChat();
       }
 
-      sendBtn.addEventListener("click", handleSend);
-      inputEl.addEventListener("keydown", (e) => {
+      sendBtn.onclick = handleSend;
+      inputEl.onkeydown = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
           handleSend();
         }
-      });
-
-      scrollToBottom();
+      };
     }
 
     function showConsoleForUser(user) {
@@ -210,6 +247,13 @@
       const email = user.email || "user@example.com";
       accountEmailSpan.textContent = email;
       accountAvatarSpan.textContent = (email.charAt(0) || "U").toUpperCase();
+
+      // If no spaces, create default one
+      if (getStoredSpaces().length === 0) {
+        setStoredSpaces([{ title: "Enigma Chat", messages: [] }]);
+      }
+      setSelectedSpaceIndex(0);
+      renderSpacesList();
       renderChat();
     }
 
@@ -219,25 +263,25 @@
       accountChip.style.display = "none";
     }
 
-    // Tab switching
+    // Auth tab switching
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
         tabs.forEach((t) => t.classList.remove("is-active"));
         tab.classList.add("is-active");
         mode = tab.dataset.mode || "login";
-        hint.textContent = mode === "login" 
-          ? "New here? Use Sign up to create an account." 
-          : "Already have an account? Switch to Log in.";
+        hint.textContent =
+          mode === "login"
+            ? "New here? Use Sign up to create an account."
+            : "Already have an account? Switch to Log in.";
       });
     });
 
-    // Email/Password auth
+    // Email/password auth
     authForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("auth-email").value.trim();
       const pwd = document.getElementById("auth-password").value.trim();
       if (!email || !pwd) return;
-
       try {
         let cred;
         if (mode === "login") {
@@ -247,7 +291,7 @@
         }
         showConsoleForUser(cred.user);
       } catch (err) {
-        alert(err.message || "Auth failed.");
+        alert(err.message || "Authentication failed");
       }
     });
 
@@ -270,6 +314,16 @@
     onAuthStateChanged(auth, (user) => {
       if (user) showConsoleForUser(user);
       else showAuth();
+    });
+
+    // New Space button
+    newSpaceBtn.addEventListener("click", () => {
+      const spaces = getStoredSpaces();
+      spaces.push({ title: `Space ${spaces.length + 1}`, messages: [] });
+      setStoredSpaces(spaces);
+      setSelectedSpaceIndex(spaces.length - 1);
+      renderSpacesList();
+      renderChat();
     });
   </script>
 </body>
