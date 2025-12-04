@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enigma AI – Console</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- NAV -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-mark logo-mark-four">
+          <span class="e-bar e-bar-1"></span>
+          <span class="e-bar e-bar-2"></span>
+          <span class="e-bar e-bar-3"></span>
+        </span>
+        <span class="logo-text">Enigma</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="ai.html" class="is-active">AI</a>
+      </nav>
+
+      <!-- Account chip (hidden until "logged in") -->
+      <button class="account-chip" id="account-chip" style="display:none;">
+        <span class="account-avatar" id="account-avatar">N</span>
+        <span class="account-email" id="account-email">you@example.com</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <!-- AUTH SECTION -->
+    <section class="hero hero-ai" id="auth-section">
+      <div class="hero-inner hero-two-col hero-ai-layout">
+        <div class="hero-left">
+          <p class="eyebrow">Enigma AI</p>
+          <h1>Sign in to your vibecoding lab.</h1>
+          <p class="hero-sub hero-sub-large">
+            One account for everything Enigma. Log in once, and your spaces stay
+            ready for the next session.
+          </p>
+        </div>
+
+        <!-- Auth card -->
+        <div class="hero-right">
+          <div class="auth-card">
+            <div class="auth-tabs">
+              <button class="auth-tab is-active" data-mode="login">Log in</button>
+              <button class="auth-tab" data-mode="signup">Sign up</button>
+            </div>
+
+            <!-- Email form -->
+            <form class="auth-form" id="auth-form">
+              <div class="field">
+                <label for="auth-email">Email</label>
+                <input
+                  type="email"
+                  id="auth-email"
+                  required
+                  placeholder="you@example.com"
+                />
+              </div>
+              <div class="field">
+                <label for="auth-password">Password</label>
+                <input
+                  type="password"
+                  id="auth-password"
+                  required
+                  placeholder="••••••••"
+                  minlength="6"
+                />
+              </div>
+
+              <button type="submit" class="btn primary auth-submit">
+                Continue
+              </button>
+
+              <p class="auth-or">
+                <span></span>
+                <span>or</span>
+                <span></span>
+              </p>
+
+              <!-- Google sign-in button (fake for now) -->
+              <button type="button" class="btn auth-google" id="google-btn">
+                <span class="google-icon"></span>
+                <span>Continue with Google</span>
+              </button>
+
+              <p class="auth-hint" id="auth-hint">
+                New here? Use Sign up to create an account.
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONSOLE SECTION (hidden until "logged in") -->
+    <section class="ai-console" id="console-section" style="display:none;">
+      <header class="ai-console-header">
+        <div>
+          <p class="eyebrow">Enigma AI Console</p>
+          <h1>Your vibecoding spaces.</h1>
+          <p class="hero-sub hero-sub-large">
+            Create different spaces for projects, experiments, or late‑night ideas.
+          </p>
+        </div>
+        <button class="btn ghost" id="add-space-btn">New space</button>
+      </header>
+
+      <div class="spaces-grid" id="spaces-grid">
+        <!-- Spaces will be injected here -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>© <span id="year"></span> Enigma. The Unknown Awaits.</span>
+    </div>
+  </footer>
+
+  <script>
+    // Year in footer
+    const y = document.getElementById("year");
+    if (y) y.textContent = new Date().getFullYear();
+
+    // ---- Fake auth with localStorage (so user "stays logged in") ----
+    const STORAGE_KEY_USER = "enigmaUser";
+    const STORAGE_KEY_SPACES = "enigmaSpaces";
+
+    const authSection = document.getElementById("auth-section");
+    const consoleSection = document.getElementById("console-section");
+    const accountChip = document.getElementById("account-chip");
+    const accountEmailSpan = document.getElementById("account-email");
+    const accountAvatarSpan = document.getElementById("account-avatar");
+
+    const authForm = document.getElementById("auth-form");
+    const tabs = document.querySelectorAll(".auth-tab");
+    const hint = document.getElementById("auth-hint");
+    const googleBtn = document.getElementById("google-btn");
+
+    const addSpaceBtn = document.getElementById("add-space-btn");
+    const spacesGrid = document.getElementById("spaces-grid");
+
+    let mode = "login";
+
+    function getStoredUser() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_USER);
+        return raw ? JSON.parse(raw) : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function setStoredUser(user) {
+      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
+    }
+
+    function getStoredSpaces() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_SPACES);
+        return raw ? JSON.parse(raw) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function setStoredSpaces(spaces) {
+      localStorage.setItem(STORAGE_KEY_SPACES, JSON.stringify(spaces));
+    }
+
+    // UI toggles
+    function showConsoleForUser(user) {
+      authSection.style.display = "none";
+      consoleSection.style.display = "block";
+      accountChip.style.display = "inline-flex";
+
+      const email = user.email || "you@example.com";
+      accountEmailSpan.textContent = email;
+      accountAvatarSpan.textContent = email.charAt(0).toUpperCase() || "U";
+
+      renderSpaces();
+    }
+
+    function showAuth() {
+      authSection.style.display = "block";
+      consoleSection.style.display = "none";
+      accountChip.style.display = "none";
+    }
+
+    // Render spaces
+    function renderSpaces() {
+      const spaces = getStoredSpaces();
+      spacesGrid.innerHTML = "";
+
+      if (!spaces.length) {
+        // create one default space
+        const defaultSpace = {
+          id: Date.now(),
+          title: "Space 1",
+          content: ""
+        };
+        setStoredSpaces([defaultSpace]);
+        return renderSpaces();
+      }
+
+      spaces.forEach((space, index) => {
+        const card = document.createElement("article");
+        card.className = "space-card";
+
+        card.innerHTML = `
+          <header class="space-header">
+            <input
+              class="space-title-input"
+              value="${space.title || "Space " + (index + 1)}"
+            />
+            <button class="space-delete" title="Delete space">×</button>
+          </header>
+          <textarea
+            class="space-textarea"
+            placeholder="Describe the vibe, paste code, or write your idea…"
+          >${space.content || ""}</textarea>
+        `;
+
+        const titleInput = card.querySelector(".space-title-input");
+        const textarea = card.querySelector(".space-textarea");
+        const deleteBtn = card.querySelector(".space-delete");
+
+        titleInput.addEventListener("input", () => {
+          const updated = getStoredSpaces();
+          const target = updated.find((s) => s.id === space.id);
+          if (target) {
+            target.title = titleInput.value;
+            setStoredSpaces(updated);
+          }
+        });
+
+        textarea.addEventListener("input", () => {
+          const updated = getStoredSpaces();
+          const target = updated.find((s) => s.id === space.id);
+          if (target) {
+            target.content = textarea.value;
+            setStoredSpaces(updated);
+          }
+        });
+
+        deleteBtn.addEventListener("click", () => {
+          const updated = getStoredSpaces().filter((s) => s.id !== space.id);
+          setStoredSpaces(updated);
+          renderSpaces();
+        });
+
+        spacesGrid.appendChild(card);
+      });
+    }
+
+    function addNewSpace() {
+      const spaces = getStoredSpaces();
+      const nextIndex = spaces.length + 1;
+      spaces.push({
+        id: Date.now(),
+        title: "Space " + nextIndex,
+        content: ""
+      });
+      setStoredSpaces(spaces);
+      renderSpaces();
+    }
+
+    // Tab switching
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.remove("is-active"));
+        tab.classList.add("is-active");
+        mode = tab.dataset.mode || "login";
+        hint.textContent =
+          mode === "login"
+            ? "New here? Use Sign up to create an account."
+            : "Already have an account? Switch to Log in.";
+      });
+    });
+
+    // Fake login/signup (persists user locally so they "stay signed in")
+    authForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("auth-email").value.trim();
+      const pwd = document.getElementById("auth-password").value.trim();
+      if (!email || !pwd) return;
+
+      const user = { email };
+      setStoredUser(user);
+      showConsoleForUser(user);
+    });
+
+    // Fake Google button
+    googleBtn.addEventListener("click", () => {
+      const email = "user@gmail.com";
+      const user = { email };
+      setStoredUser(user);
+      showConsoleForUser(user);
+    });
+
+    // Clicking account chip could later open a dropdown; for now, optional logout
+    accountChip.addEventListener("dblclick", () => {
+      if (confirm("Log out of Enigma AI on this device?")) {
+        localStorage.removeItem(STORAGE_KEY_USER);
+        // keep spaces, just hide console
+        showAuth();
+      }
+    });
+
+    // On load: if user exists, go straight to console
+    const existingUser = getStoredUser();
+    if (existingUser) {
+      showConsoleForUser(existingUser);
+    } else {
+      showAuth();
+    }
+
+    // Add space button
+    if (addSpaceBtn) {
+      addSpaceBtn.addEventListener("click", addNewSpace);
+    }
+  </script>
+</body>
+</html>
