@@ -5,6 +5,190 @@
   <title>Enigma – Console</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Layout for Perplexity-style sidebar + main chat */
+    .ai-console-content{
+      display:flex;
+      height:calc(100vh - 200px);
+      gap:20px;
+      overflow:hidden;
+    }
+    .spaces-sidebar{
+      width:280px;
+      flex-shrink:0;
+      background:rgba(255,255,255,0.02);
+      border-radius:28px;
+      padding:20px 16px;
+      overflow-y:auto;
+      max-height:calc(100vh - 200px);
+    }
+    .spaces-list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .space-item{
+      position:relative;
+      padding:12px 40px 12px 16px;
+      border-radius:20px;
+      background:rgba(255,255,255,0.04);
+      cursor:pointer;
+      font-size:.9rem;
+      transition:all .2s;
+      color:var(--fg);
+      user-select:none;
+    }
+    .space-item:hover{
+      background:rgba(255,255,255,0.08);
+    }
+    .space-item.active{
+      background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.08));
+      box-shadow:0 4px 20px rgba(255,255,255,.1);
+    }
+    .space-delete{
+      position:absolute;
+      right:12px;
+      top:50%;
+      transform:translateY(-50%);
+      width:24px;
+      height:24px;
+      border-radius:999px;
+      background:rgba(255,0,0,0.3);
+      border:none;
+      color:#fff;
+      font-size:.9rem;
+      cursor:pointer;
+      opacity:.7;
+      transition:opacity .2s;
+    }
+    .space-delete:hover{
+      opacity:1;
+      background:rgba(255,0,0,.6);
+    }
+    .space-title-input {
+      width: 100%;
+      outline: none;
+      font: inherit;
+      border: none;
+      background: transparent;
+      color: inherit;
+      position: absolute;
+      left: 16px;
+      top: 12px;
+      padding-right: 40px;
+      border-radius: 20px;
+    }
+    .space-title-input:focus {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .chat-main-container{
+      flex:1;
+      background:rgba(255,255,255,0.015);
+      border-radius:28px;
+      box-shadow:0 20px 60px rgba(0,0,0,.8);
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+    .chat-header{
+      padding:24px;
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      background:rgba(10,10,10,0.4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-title{
+      font-size:1.3rem;
+      font-weight:600;
+      user-select:none;
+    }
+    .chat-messages{
+      flex:1;
+      overflow-y:auto;
+      padding:24px;
+      gap:16px;
+      display:flex;
+      flex-direction:column;
+    }
+    .chat-msg{
+      margin-bottom:12px;
+      display:flex;
+    }
+    .chat-msg.user{
+      justify-content:flex-end;
+    }
+    .chat-msg.ai{
+      justify-content:flex-start;
+    }
+    .chat-bubble{
+      max-width:75%;
+      padding:16px 20px;
+      border-radius:24px;
+      font-size:.95rem;
+      line-height:1.5;
+      box-shadow:0 4px 20px rgba(0,0,0,0.3);
+      white-space: pre-wrap;
+      user-select:text;
+    }
+    .chat-bubble.user{
+      background:linear-gradient(135deg,rgba(255,255,255,.25),rgba(255,255,255,.15));
+      color:var(--fg);
+      border-radius:24px 24px 8px 24px;
+      border:1px solid rgba(255,255,255,.3);
+    }
+    .chat-bubble.ai{
+      background:rgba(15,15,15,.95);
+      color:var(--fg-soft);
+      border-radius:24px 24px 24px 8px;
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .chat-input-area{
+      padding:24px;
+      border-top:1px solid rgba(255,255,255,0.06);
+      background:rgba(10,10,10,0.3);
+    }
+    .chat-input-container{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .chat-input-main{
+      flex:1;
+      padding:16px 24px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.25);
+      background:rgba(10,10,10,0.9);
+      color:var(--fg);
+      font-size:1rem;
+      outline:none;
+    }
+    .chat-input-main:focus{
+      border-color:rgba(255,255,255,0.5);
+    }
+    .chat-send-main{
+      width:56px;
+      height:56px;
+      border-radius:999px;
+      background:linear-gradient(135deg,#667eea,#764ba2);
+      color:#fff;
+      border:none;
+      cursor:pointer;
+      font-size:1.4rem;
+      font-weight:700;
+      transition:transform .2s;
+      user-select:none;
+    }
+    .chat-send-main:hover{
+      transform:scale(1.05);
+    }
+    @media (max-width:900px){
+      .ai-console-content{flex-direction:column;height:auto;gap:16px;}
+      .spaces-sidebar{width:100%;max-height:300px;}
+      .chat-main-container{height:60vh;}
+    }
+  </style>
 </head>
 <body>
   <!-- NAV -->
@@ -30,15 +214,14 @@
     </div>
   </header>
 
-  <main class="shell">
-    <!-- AUTH SECTION -->
+  <main class="shell" style="padding: 24px;">
     <section class="hero hero-ai" id="auth-section">
       <div class="hero-inner hero-two-col hero-ai-layout">
         <div class="hero-left">
           <p class="eyebrow">Enigma AI</p>
           <h1>Sign in to your vibecoding lab.</h1>
           <p class="hero-sub hero-sub-large">
-            One account for everything Enigma. Log in once, and your space stays ready.
+            One account for everything Enigma. Log in once, and your spaces stay ready.
           </p>
         </div>
         <div class="hero-right">
@@ -64,33 +247,25 @@
               </button>
               <p class="auth-hint" id="auth-hint">New here? Use Sign up to create an account.</p>
             </form>
-          </div?
-
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CONSOLE SECTION -->
-    <section class="ai-console" id="console-section" style="display:none;">
-      <header class="ai-console-header">
+    <section class="ai-console" id="console-section" style="display:none; height: calc(100vh - 160px);">
+      <header class="ai-console-header" style="padding-bottom:16px;">
         <div>
           <p class="eyebrow">Enigma AI Console</p>
           <h1>Talk to Enigma.</h1>
         </div>
         <button class="btn ghost" id="new-space-btn">+ New Space</button>
       </header>
-
-      <!-- Split layout: left sidebar + right chat -->
-      <div class="ai-console-content" style="display:flex; height: calc(100vh - 160px); gap: 20px;">
-        <!-- Spaces sidebar -->
-        <nav class="spaces-sidebar" style="width: 280px; background: rgba(255,255,255,0.02); border-radius: 20px; padding: 16px; overflow-y: auto;">
-          <div id="spaces-list"></div>
+      <div class="ai-console-content">
+        <nav class="spaces-sidebar">
+          <div class="spaces-list" id="spaces-list"></div>
         </nav>
-
-        <!-- Main chat area -->
-        <main class="chat-main-container" style="flex: 1; background: rgba(255,255,255,0.02); border-radius: 28px; box-shadow: 0 0 40px rgba(0,0,0,0.6); display: flex; flex-direction: column; overflow: hidden;">
-          <div id="chat-main" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 20px;"></div>
+        <main class="chat-main-container">
+          <div id="chat-main"></div>
         </main>
       </div>
     </section>
@@ -105,9 +280,15 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
     import {
-      getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged,
-      signInWithEmailAndPassword, createUserWithEmailAndPassword,
-      GoogleAuthProvider, signInWithPopup, signOut
+      getAuth,
+      setPersistence,
+      browserLocalPersistence,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signOut
     } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -125,6 +306,7 @@
     const provider = new GoogleAuthProvider();
     setPersistence(auth, browserLocalPersistence);
 
+    // DOM elements
     const authSection = document.getElementById("auth-section");
     const consoleSection = document.getElementById("console-section");
     const accountChip = document.getElementById("account-chip");
@@ -176,13 +358,70 @@
         const el = document.createElement("div");
         el.className = "space-item";
         if (idx === selectedIdx) el.classList.add("active");
-        el.textContent = space.title || `Space ${idx + 1}`;
-        el.style.padding = "12px 16px";
-        el.style.borderRadius = "20px";
-        el.style.background = idx === selectedIdx ? "rgba(255,255,255,0.12)" : "transparent";
-        el.style.cursor = "pointer";
-        el.style.marginBottom = "8px";
-        el.style.color = "var(--fg)";
+
+        // Create container div for title and delete button
+        const titleDiv = document.createElement("div");
+        titleDiv.textContent = space.title || `Space ${idx + 1}`;
+        titleDiv.style.cursor = "pointer";
+        titleDiv.style.userSelect = "none";
+
+        // Rename on double click
+        titleDiv.ondblclick = () => {
+          const input = document.createElement("input");
+          input.type = "text";
+          input.value = space.title || `Space ${idx + 1}`;
+          input.className = "space-title-input active";
+          input.style.width = "calc(100% - 40px)";
+          input.style.padding = "6px 12px";
+          input.style.borderRadius = "20px";
+          input.style.border = "none";
+          input.style.outline = "none";
+          input.style.background = "rgba(255,255,255,0.1)";
+          input.style.color = "var(--fg)";
+          input.style.fontSize = ".9rem";
+          el.replaceChild(input, titleDiv);
+          input.focus();
+
+          input.onblur = () => {
+            const newVal = input.value.trim();
+            if (newVal.length > 0) {
+              space.title = newVal;
+              setStoredSpaces(spaces);
+            }
+            el.replaceChild(titleDiv, input);
+            renderSpacesList();
+          };
+
+          input.onkeydown = (e) => {
+            if (e.key === "Enter") {
+              input.blur();
+            }
+          };
+        };
+
+        el.appendChild(titleDiv);
+
+        // Delete button
+        const delBtn = document.createElement("button");
+        delBtn.className = "space-delete";
+        delBtn.textContent = "×";
+        delBtn.title = "Delete space";
+        delBtn.onclick = (e) => {
+          e.stopPropagation();
+          if (confirm(`Delete space "${space.title || `Space ${idx + 1}`}?"`)) {
+            spaces.splice(idx, 1);
+            setStoredSpaces(spaces);
+            // Adjust selected index
+            let newSelected = getSelectedSpaceIndex();
+            if (newSelected >= spaces.length) newSelected = spaces.length - 1;
+            setSelectedSpaceIndex(newSelected >= 0 ? newSelected : 0);
+            renderSpacesList();
+            renderChat();
+          }
+        };
+
+        el.appendChild(delBtn);
+
         el.onclick = () => {
           setSelectedSpaceIndex(idx);
           renderSpacesList();
@@ -195,23 +434,25 @@
     function renderChat() {
       const spaces = getStoredSpaces();
       const selectedIdx = getSelectedSpaceIndex();
-      if (!spaces.length || selectedIdx >= spaces.length) return;
+      if (!spaces.length || selectedIdx >= spaces.length) {
+        chatMain.innerHTML = "<p style='color:var(--fg-soft);text-align:center;padding:40px;'>No spaces. Create a new space!</p>";
+        return;
+      }
 
       const space = spaces[selectedIdx];
       chatMain.innerHTML = `
-        <div class="chat-header" style="display:flex;justify-content:space-between;align-items:center;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.08);">
-          <div style="font-size:1.4rem;font-weight:600;">${space.title}</div>
-          <button class="chat-space-menu" style="border:none;background:none;color:var(--fg-soft);font-size:1.2rem;cursor:pointer;">⋮⋮</button>
+        <div class="chat-header">
+          <div class="chat-title">${space.title}</div>
+          <button class="chat-space-menu">⋮⋮</button>
         </div>
-        <div class="chat-messages" id="main-chat-messages" style="flex-grow:1;overflow-y:auto;padding:16px 0;display:flex;flex-direction:column;gap:12px;"></div>
-        <div class="chat-input-area" style="padding-top:16px;">
-          <div class="chat-input-container" style="display:flex;gap:12px;">
-            <input class="chat-input-main" type="text" placeholder="Message Enigma..." style="flex:1;padding:14px 20px;border-radius:999px;border:1px solid rgba(255,255,255,0.2);background:rgba(10,10,10,0.9);color:var(--fg);font-size:1rem;outline:none;" />
-            <button class="chat-send-main" style="width:56px;height:56px;border-radius:999px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;cursor:pointer;font-size:1.4rem;font-weight:700;transition:transform .15s ease;">→</button>
+        <div class="chat-messages" id="main-chat-messages"></div>
+        <div class="chat-input-area">
+          <div class="chat-input-container">
+            <input class="chat-input-main" type="text" placeholder="Message Enigma..." />
+            <button class="chat-send-main">→</button>
           </div>
         </div>
       `;
-
       const messagesEl = document.getElementById("main-chat-messages");
       const inputEl = chatMain.querySelector(".chat-input-main");
       const sendBtn = chatMain.querySelector(".chat-send-main");
@@ -219,28 +460,8 @@
       messagesEl.innerHTML = "";
       (space.messages || []).forEach((msg) => {
         const row = document.createElement("div");
-        row.style.display = "flex";
-        row.style.justifyContent = msg.from === "user" ? "flex-end" : "flex-start";
-        const bubble = document.createElement("div");
-        bubble.textContent = msg.text;
-        bubble.style.maxWidth = "70%";
-        bubble.style.padding = "12px 20px";
-        bubble.style.borderRadius = "24px";
-        bubble.style.fontSize = "1rem";
-        bubble.style.lineHeight = "1.4";
-        bubble.style.whiteSpace = "pre-wrap";
-        if (msg.from === "user") {
-          bubble.style.background = "rgba(255, 255, 255, 0.2)";
-          bubble.style.color = "var(--fg)";
-          bubble.style.borderRadius = "24px 24px 8px 24px";
-          bubble.style.border = "1px solid rgba(255,255,255,0.2)";
-        } else {
-          bubble.style.background = "rgba(10, 10, 10, 0.95)";
-          bubble.style.color = "var(--fg-soft)";
-          bubble.style.borderRadius = "24px 24px 24px 8px";
-          bubble.style.border = "1px solid rgba(255,255,255,0.1)";
-        }
-        row.appendChild(bubble);
+        row.className = `chat-msg ${msg.from}`;
+        row.innerHTML = `<div class="chat-bubble ${msg.from}">${msg.text}</div>`;
         messagesEl.appendChild(row);
       });
 
@@ -291,7 +512,6 @@
       accountChip.style.display = "none";
     }
 
-    // Auth tabs switching
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
         tabs.forEach((t) => t.classList.remove("is-active"));
@@ -301,7 +521,6 @@
       });
     });
 
-    // Email/password auth
     authForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("auth-email").value.trim();
@@ -320,7 +539,6 @@
       }
     });
 
-    // Google auth
     googleBtn.addEventListener("click", async () => {
       try {
         const result = await signInWithPopup(auth, provider);
@@ -330,18 +548,15 @@
       }
     });
 
-    // Logout double click
     accountChip.addEventListener("dblclick", async () => {
       if (confirm("Log out?")) await signOut(auth);
     });
 
-    // Listen for auth state change
     onAuthStateChanged(auth, (user) => {
       if (user) showConsoleForUser(user);
       else showAuth();
     });
 
-    // New Space button
     newSpaceBtn.addEventListener("click", () => {
       const spaces = getStoredSpaces();
       spaces.push({ title: `Space ${spaces.length + 1}`, messages: [] });
