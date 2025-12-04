@@ -712,101 +712,163 @@ body {
 }
 
 /* AI console layout */
-.ai-console {
-  margin-top: 40px;
+./* AI page auth card */
+.hero-ai {
+  min-height: calc(100vh - 130px);
 }
 
-.ai-console-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 24px;
+.hero-ai-layout {
+  align-items: center;
 }
 
-.spaces-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-}
-
-/* Space cards */
-.space-card {
-  border-radius: 20px;
+/* More rounded, pill-feel auth card */
+.auth-card {
+  width: min(380px, 100%);
+  padding: 20px 20px 18px;
+  border-radius: 32px; /* rounder */
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: radial-gradient(circle at top left,
-              rgba(255, 255, 255, 0.06),
-              rgba(10, 10, 10, 0.96));
-  backdrop-filter: blur(18px);
-  padding: 12px 12px 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+              rgba(255, 255, 255, 0.12),
+              rgba(15, 15, 15, 0.96));
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-soft);
 }
 
-.space-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.space-title-input {
-  flex: 1;
+/* Tabs already pill; just keep them */
+.auth-tabs {
+  display: inline-flex;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(5, 5, 5, 0.9);
-  padding: 6px 10px;
-  font-size: 0.85rem;
-  color: var(--fg);
-  outline: none;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 3px;
+  margin-bottom: 16px;
 }
 
-.space-title-input:focus {
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.space-delete {
+/* Slightly softer pill tabs */
+.auth-tab {
+  border: none;
+  background: transparent;
+  padding: 7px 16px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(40, 40, 40, 0.9);
+  font-size: 0.8rem;
   color: var(--fg-softer);
-  width: 26px;
-  height: 26px;
-  font-size: 1rem;
   cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
 }
 
-.space-delete:hover {
+.auth-tab.is-active {
   background: rgba(255, 255, 255, 0.1);
   color: var(--fg);
 }
 
-.space-textarea {
-  border-radius: 14px;
+/* Form layout */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 0.8rem;
+  color: var(--fg-soft);
+}
+
+/* Inputs: rounded, cylindrical */
+.field input {
+  border-radius: 999px; /* full pill */
   border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(5, 5, 5, 0.95);
-  padding: 10px;
-  min-height: 140px;
-  resize: vertical;
-  font-size: 0.85rem;
+  background: rgba(10, 10, 10, 0.9);
+  padding: 9px 12px;
   color: var(--fg);
-  font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+  font-size: 0.86rem;
   outline: none;
 }
 
-.space-textarea:focus {
+.field input:focus {
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Responsive for AI console */
-@media (max-width: 900px) {
-  .spaces-grid {
-    grid-template-columns: 1fr;
-  }
+/* Buttons are already pill in global .btn, just adjust spacing */
+.auth-submit {
+  width: 100%;
+  margin-top: 6px;
+}
 
-  .ai-console-header {
+/* Divider */
+.auth-or {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--fg-softer);
+  margin: 6px 0 4px;
+}
+
+.auth-or span:first-child,
+.auth-or span:last-child {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Google button: pill + centered */
+.auth-google {
+  width: 100%;
+  border-radius: 999px;
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.85);
+  color: var(--fg-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.auth-google:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--fg);
+}
+
+/* Tiny Google icon pill-ish square */
+.google-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background:
+    conic-gradient(from 0deg,
+      #ea4335 0deg 90deg,
+      #4285f4 90deg 180deg,
+      #34a853 180deg 270deg,
+      #fbbc05 270deg 360deg);
+}
+
+.auth-hint {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  color: var(--fg-softer);
+}
+
+/* Responsive tweak for Enigma (AI) page */
+@media (max-width: 900px) {
+  .hero-ai-layout {
     flex-direction: column;
     align-items: flex-start;
+    gap: 28px;
+  }
+
+  .hero-right {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .auth-card {
+    width: 100%;
   }
 }
+
